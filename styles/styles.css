@@ -1,0 +1,20 @@
+footer{
+    background-color: rgb(142, 202, 239);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#logo{
+    width: 125px;
+}
+
+#icono{
+    font-size: 40px;
+}
+  
+@media (max-width: 768px) {
+    #logo{
+        width: 75px;
+    }
+}
+
