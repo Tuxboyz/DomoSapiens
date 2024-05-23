@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,7 +19,7 @@
 </head>
 <body>
     <header class="py-3 mb-3 border-bottom">
-        <?php include_once 'includes/header.php';?>
+        <?php include_once 'partials/header.php';?>
     </header>
 
     <main>
@@ -139,8 +140,8 @@
         </div>
     </main>
 
-    <footer>
-        <?php include_once 'includes/footer.php';?>
+    <footer class="footer mt-auto">
+        <?php include_once 'partials/footer.php';?>
     </footer>
 
     <script src="scripts/bootstrap.bundle.min.js"></script>

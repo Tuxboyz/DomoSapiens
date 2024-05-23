@@ -1,9 +1,11 @@
+/*index.php*/
 footer{
     background-color: rgb(142, 202, 239);
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
+/*header.php*/
 #logo{
     width: 125px;
 }
@@ -18,3 +20,22 @@ footer{
     }
 }
 
+/*login.php*/
+
+#form{
+    max-width: 430px;
+    padding: 3rem;
+}
+#log-block{
+    margin-bottom: 10px;
+}
+
+/*my_data.php*/
+
+#icono_data{
+    font-size: 70px;
+}
+
+#data-tab-pane{
+    max-width: 1000px;
+}
