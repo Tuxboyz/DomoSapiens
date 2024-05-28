@@ -18,7 +18,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar Fecha de Nacimiento</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <a href="my_data.php" class="btn-close"></a>
             </div>
             <div class="modal-body">
                 <form id="edit_birthdate_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
@@ -31,7 +31,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <a href="my_data.php"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button></a>
                 <button type="submit" form="edit_birthdate_form" class="btn btn-primary">Aplicar</button>
             </div>
         </div>

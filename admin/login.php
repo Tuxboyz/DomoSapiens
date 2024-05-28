@@ -1,11 +1,13 @@
 <?php
     session_start();
-
-    require_once('includes/Config.php');
-    require_once('includes/Usuario.php');
+    if(isset($_SESSION['nombre_admin'])){
+        header("Location: panel.php");
+        exit;
+    }
+    require_once('Admin.php');
+    require_once('../includes/Config.php');
 
     $errores = [];
-    $mensajeExito = '';
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['usuario'])) {
@@ -23,8 +25,8 @@
         }
 
         if (empty($errores)) {
-            $conn = new Usuario();
-            $test = $conn->validacion($usuario, $password);
+            $conn = new Admin();
+            $test = $conn->validacion_admin($usuario, $password);
             if ($test == false) {
                 $errores[] = '<div class="alert alert-danger d-flex align-items-center" role="alert">
                                 <i class="m-1 bi bi-exclamation-triangle"></i>
@@ -34,11 +36,11 @@
                             </div>';
             } else {
                 $_SESSION['id'] = $test['id'];
-                $_SESSION['nombre'] = $test['nombre'];
-                $_SESSION['usuario'] = $test['baja'];
+                $_SESSION['nombre_admin'] = $test['nombre_admin'];
+                $_SESSION['permisos'] = $test['administrador'];
                 
                 sleep(2);
-                header('Location: index.php');
+                header('Location: panel.php');
                 exit();
             }
         }
@@ -54,21 +56,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Paguina de venta de productos de domotica.">
     <meta name="keywords" content="palabra clave 1, palabra clave 2, palabra clave 3">
-    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="../styles/styles.css">
     <title>Bienvenido!</title>
     <style>
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-        }
-        .valid {
-            border-color: #198754;
-        }
-        .invalid {
-            border-color: #dc3545;
-        }
         .form-floating label {
             transition: all 0.2s;
         }
@@ -81,11 +73,7 @@
     <script src="scripts/bootstrap.bundle.min.js"></script>
     <script src="scripts/validation-log.js"></script>
 </head>
-<body>
-    <header class="py-3 mb-3 border-bottom">
-        <?php require_once 'partials/header.php'; ?>
-    </header>
-<?php if (!isset($_SESSION['id'])){ ?>
+<body class="d-flex align-items-center justify-content-center vh-100">
     <main class="form-signin w-100 m-auto" id="form">
         <form action="login.php" method="post">
             <div class="text-center" id="log-block">
@@ -105,12 +93,12 @@
                 <span class="text-danger"></span>
             </div>
 
-            <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+            <button class="btn btn-primary w-100 py-2" type="submit">iniciar sesion</button>
 
-            <div class="text-center m-3">
-                No tienes cuenta, créate una <a href="create_acc.php">aquí</a>!
-            </div>
         </form>
+        <div class="text-center m-3">
+            Si tienes algun problema, no dudes en contactar con tu superior.
+        </div>
         <div class="text-center m-3">
             <?php
                 if (!empty($errores)) {
@@ -123,23 +111,6 @@
             ?>
         </div>
     </main>
-<?php } else { ?>
-    <div class="container my-5">
-        <div class="my-5 bg-body-tertiary p-5 rounded">
-            <div class="col-sm-8 py-5 mx-auto text-center">
-                <h2>Ya has inciado sesion.</h2>
-            </div>
-        </div>
-
-        <div class="text-center"><p>Si quieres volver a la paguina de incicio puedes darle <a href="index.php">aquí</a></p></div>
-        <div class="text-center"><p>Si quieres acceder a tu panel de control dale <a href="my_data.php">aquí</a></p></div>
-        <div class="text-center"><p>Si necesitas ayuda puedes darle <a href="faq.php">aquí</a></p></div>
-        
-    </div>
-<?php } ?>
-
-    <footer class="footer mt-auto">
-        <?php require_once 'partials/footer.php'; ?>
-    </footer>
+    <script src="../scripts/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,5 +1,4 @@
 <?php
-
     $provincias = [
         "A Coruña", "Álava", "Albacete", "Alicante", "Almería", "Asturias", "Ávila",
         "Badajoz", "Barcelona", "Burgos", "Cáceres", "Cádiz", "Cantabria", "Castellón",
@@ -13,7 +12,6 @@
         "Santa Cruz de Tenerife (El Hierro)", "Segovia", "Sevilla", "Soria", 
         "Tarragona", "Teruel", "Toledo", "Valencia", "Valladolid", "Vizcaya", "Zamora", "Zaragoza"
     ];
-
     function imprimirSelect($provincias) {
         echo '<select class="form-select" id="ciudad" name="ciudad" required>';
         echo '<option value="">Seleccione una opción</option>';
@@ -26,9 +24,82 @@
 
 <div class="container my-5">
     <div class="bg-body-tertiary p-5 rounded">
-        <div class="col-sm-8 py-5 mx-auto text-center">
-            <p class="fs-5">Aún no hay ninguna dirección...</p>
-        </div>
+        <?php
+            $conn = new Usuario();
+            $show_dir = $conn->show_address($_SESSION['id']);
+
+            if(!$show_dir){
+                echo '<div class="col-sm-8 py-5 mx-auto text-center">
+                        <p class="fs-5">Aún no hay ninguna dirección...</p>
+                     </div>';
+            } else {
+                echo '<style>.card.address-card {
+                            transition: transform 0.2s;
+                        }
+                        
+                        .card.address-card:hover {
+                            transform: scale(1.05);
+                        }
+                     </style>
+                <div class="container"><div class="row justify-content-center">'.$show_dir.'</div></div>';
+                if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_direccion'])) {
+                    $id_delete = htmlspecialchars($_POST['id_direccion']);
+                    $errores = [];
+    
+                    // Verificar si el checkbox de confirmación está marcado
+                    if (!isset($_POST['confirm_delete'])) {
+                        $errores[] = 'Error: No has aceptado el botón.';
+                    }
+    
+                    if (!empty($errores)) {
+                        echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var modal = new bootstrap.Modal(document.getElementById('mod_".$id_delete."'));
+                                modal.show(); 
+                                document.getElementById('form_message_".$id_delete."').innerHTML = `<p style='color:red;'>".implode('<br>', $errores)."</p>`;
+
+                                // Update tab classes
+                                document.getElementById('nav-data-tab').className = 'nav-link';
+                                document.getElementById('nav-data-tab').setAttribute('aria-selected', 'false');
+                                document.getElementById('nav-data-tab').setAttribute('tabindex', '-1');
+
+                                document.getElementById('nav-data').className = 'tab-pane fade';
+
+                                document.getElementById('nav-address-tab').className = 'nav-link active';
+                                document.getElementById('nav-address-tab').setAttribute('aria-selected', 'true');
+                                document.getElementById('nav-address-tab').removeAttribute('tabindex');
+
+                                document.getElementById('nav-address').className = 'tab-pane fade active show';
+                            });
+                        </script>";
+                    } else {
+                        $conn = new Usuario();
+                        $test = $conn->elim_address($id_delete);
+                        echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                var modal = new bootstrap.Modal(document.getElementById('mod_".$id_delete."'));
+                                modal.show();
+                                document.getElementById('form_message_".$id_delete."').innerHTML = `<p style='color:green;'>Se ha borrado la dirección con éxito</p>`;
+
+                                // Update tab classes
+                                document.getElementById('nav-data-tab').className = 'nav-link';
+                                document.getElementById('nav-data-tab').setAttribute('aria-selected', 'false');
+                                document.getElementById('nav-data-tab').setAttribute('tabindex', '-1');
+
+                                document.getElementById('nav-data').className = 'tab-pane fade';
+
+                                document.getElementById('nav-address-tab').className = 'nav-link active';
+                                document.getElementById('nav-address-tab').setAttribute('aria-selected', 'true');
+                                document.getElementById('nav-address-tab').removeAttribute('tabindex');
+
+                                document.getElementById('nav-address').className = 'tab-pane fade active show';
+                            });
+                        </script>";
+                    }
+                }
+            }
+        ?>
+
     </div>
 
     <div class="text-center mt-3">
@@ -40,7 +111,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Añadir Dirección</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <a href="my_data.php" class="btn-close"></a>
                 </div>
                 <div class="modal-body">
                     <form class="needs-validation was-validated" novalidate="" id="address_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
@@ -80,7 +151,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <a href="my_data.php"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button></a>
                     <button type="submit" form="address_form" class="btn btn-primary">Aplicar</button>
                 </div>
                 <?php

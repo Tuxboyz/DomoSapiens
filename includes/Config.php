@@ -11,9 +11,3 @@ const BBDD_USER = "domosapiens";
 const BBDD_PASSWORD = "O67LrL[eKXpBlxCK";
 
 const BBDD_DSN = 'mysql: host='.BBDD_HOST.';dbname='.BBDD_NAME.';charset=utf8';
-
-//FUNCIONES NECESARIAS PARA VALIDACIONES
-
-function barrer($data) {
-    return trim(htmlspecialchars($data));
-}

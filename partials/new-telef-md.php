@@ -12,7 +12,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar N&uacute;mero de tel&eacute;fono</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <a href="my_data.php" class="btn-close"></a>
             </div>
             <div class="modal-body">
                 <form id="edit_tlf_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
@@ -25,8 +25,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" form="edit_tlf_form" class="btn btn-primary" id="apply_button">Aplicar</button>
+                <a href="my_data.php"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button></a>
+                <button type="submit" form="edit_tlf_form" class="btn btn-primary" >Aplicar</button>
             </div>
         </div>
     </div>
@@ -41,6 +41,9 @@
 
         if (empty($new_tel)) {
             $errores[] = 'Error: No has introducido ningún número de teléfono.';
+        }
+        if (!preg_match("/^\d{9}$/", $new_tel)){
+            $errores[] = 'Error: El telefono solo puede tener 9 <b>digitos</b>.';
         }
 
         if (!empty($errores)) {

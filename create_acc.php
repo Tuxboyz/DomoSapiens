@@ -102,34 +102,6 @@
                     require_once('includes/Config.php');
                     require_once('includes/Usuario.php');
 
-                    function validateNombre($nombre) {
-                        return !empty($nombre) && preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/", $nombre) && strlen($nombre) >= 3;
-                    }
-
-                    function validateApellido($apellido) {
-                        return !empty($apellido) && preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/", $apellido) && strlen($apellido) >= 3;
-                    }
-
-                    function validateEmail($email) {
-                        return !empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL) && preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|es|org)$/", $email);
-                    }
-
-                    function validatePassword($password) {
-                        return !empty($password) && strlen($password) >= 8;
-                    }
-
-                    function validateTelefono($telefono) {
-                        return !empty($telefono) && preg_match("/^\d{9}$/", $telefono);
-                    }
-
-                    function validateFechaNacimiento($fecha_nacimiento) {
-                        if (empty($fecha_nacimiento)) return false;
-                        $fecha = new DateTime($fecha_nacimiento);
-                        $hoy = new DateTime();
-                        $edad = $hoy->diff($fecha)->y;
-                        return $edad >= 18;
-                    }
-
                     $errores = [];
 
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {

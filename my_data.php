@@ -60,13 +60,12 @@ require_once('includes/Usuario.php');
 <body>
     <header class="py-3 mb-3 border-bottom">
         <?php
-        include_once 'partials/header.php';
-        include_once 'includes/Usuario.php';
+            include_once 'partials/header.php';
         ?>
     </header>
 
     <main>
-        <?php if (isset($_SESSION['nombre'])) { $conn = new Usuario();$data = $conn->get_data($_SESSION['id']);?>
+        <?php if ((isset($_SESSION['nombre']))&&(($_SESSION['usuario']) != 1)) { $conn = new Usuario();$data = $conn->get_data($_SESSION['id']);?>
 
         <div class='container'>
             <div class="row">
@@ -75,7 +74,7 @@ require_once('includes/Usuario.php');
                 </div>
 
                 <div class="col-9 d-flex align-items-center justify-content-center">
-                    <h3>Bienvenido <?php echo $_SESSION['nombre']; ?> a tu panel de control.</h3>
+                    <h3>Bienvenido <?php echo $data['nombre']?> a tu panel de control.</h3>
                 </div>
 
                 <div class="col-12">
@@ -153,67 +152,7 @@ require_once('includes/Usuario.php');
                         <div class="tab-pane fade" id="nav-leave" role="tabpanel" aria-labelledby="nav-leave-tab"
                             tabindex="0">
                             <!--Darse de baja-->
-                            <div class="bg-body-tertiary p-5 rounded text-center">
-                                <div class="col-sm-8 py-5 mx-auto">
-
-                                    <p class="fs-5">¿Quieres darte de baja?</p>
-
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#mod_eliminate">Darse de baja</button>
-
-                                    <div class="modal fade" id="mod_eliminate" data-bs-backdrop="static"
-                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                        aria-hidden="true">
-
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">¿Estas seguro que
-                                                        quieres darte de baja?</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="col-12 text-center mb-3">Se borraran los siguientes
-                                                        datos</div>
-                                                    <div class="col-12 text-center d-flex justify-content-center mb-3">
-                                                        <ul class="text-left">
-                                                            <li>Datos personales</li>
-                                                            <li>Todas tus direcciones</li>
-                                                            <li>Todos tus tickets</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="col-12 text-center mb-3">Despues de un año seran borrados en
-                                                        su totalidad, despues de esta fecha no podras recuperar los datos
-                                                        borrados</div>
-                                                    <form class="needs-validation was-validated" novalidate=""
-                                                        id="leave_form">
-                                                        <div class="mb-3">
-                                                            <label for="valid" class="form-label">Escriba <b>Darse de
-                                                                    baja</b> para confirmar:</label>
-                                                            <input type="text" class="form-control" id="valid"
-                                                                placeholder="" value="" required="">
-                                                            <div class="invalid-feedback">Es necesario poner el texto de
-                                                                confirmacion.</div>
-                                                            <!--esto usa un display block "display: block;" para mostrarse-->
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Cerrar</button>
-                                                    <button type="submit" class="btn btn-primary"
-                                                        form="leave_form">Aceptar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="form-check text-center my-3">
-                                ¿Tienes alg&uacute;n problema? Podemos ayudarte <a href="faq.php">aqu&iacute;</a>!
-                            </div>
+                            <?php include_once 'partials/leave.php';?>
                         </div>
                     </div>
                 </div>

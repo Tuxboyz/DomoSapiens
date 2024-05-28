@@ -2,6 +2,10 @@
 
     require_once("Config.php");
 
+    function barrer($data) {
+        return trim(htmlspecialchars($data));
+    }
+
     // Funciones de validación
         function validateNombre($nombre) {
             return !empty($nombre) && preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/", $nombre) && strlen($nombre) >= 3;
@@ -97,10 +101,11 @@
         public function validacion($user,$pass){
             $datos = array(':par1'=>$user,':par2'=>$pass);
 
-            $consulta = 'SELECT id_usuario, nombre 
+            $consulta = 'SELECT id_usuario, nombre, baja
                         FROM usuarios 
                         WHERE    email = :par1
-                        AND  password = :par2';
+                        AND  password = :par2
+                        AND baja = 0';
             $stmt = $this->db->prepare($consulta);
             $stmt->execute($datos);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -110,8 +115,9 @@
 
                 $id = "{$fila["id_usuario"]}";
                 $nombreCompleto = "{$fila["nombre"]}";
+                $baja = "{$fila["baja"]}";
 
-                $datos = ["id"=>$id, "nombre"=>$nombreCompleto];
+                $datos = ["id"=>$id, "nombre"=>$nombreCompleto,"usuario"=>$baja];
                 return $datos;
 
             } else {
@@ -147,7 +153,7 @@
             } else {
                 return false;
             }
-        }
+        } 
 
         public function valid_pass($id, $pass) {
             try {
@@ -292,79 +298,107 @@
             }
         }
 
-    }
-    /*
-    public function edit_data($id, $tipo, $new_dato) {
-        try {
-            // Validar tipo de dato y aplicar validación correspondiente
-            switch ($tipo) {
-                case 'nombre':
-                    if (!validateNombre($new_dato)) {
-                        throw new Exception('Error al actualizar el nombre: Nombre inválido.');
-                    }
-                    $campo = 'nombre';
-                    break;
-    
-                case 'apellidos':
-                    if (!validateApellido($new_dato)) {
-                        throw new Exception('Error al actualizar los apellidos: Apellidos inválidos.');
-                    }
-                    $campo = 'apellido';
-                    break;
-    
-                case 'email':
-                    if (!validateEmail($new_dato)) {
-                        throw new Exception('Error al actualizar el email: Email inválido.');
-                    }
-                    $campo = 'email';
-                    break;
-    
-                case 'password':
-                    if (!validatePassword($new_dato)) {
-                        throw new Exception('Error al actualizar la contraseña: Contraseña inválida.');
-                    }
-                    $campo = 'password';
-                    break;
-    
-                case 'fecha_nac':
-                    if (!validateFechaNacimiento($new_dato)) {
-                        throw new Exception('Error al actualizar la fecha de nacimiento: Fecha de nacimiento inválida.');
-                    }
-                    $campo = 'fecha_nac';
-                    break;
-    
-                case 'telefono':
-                    if (!validateTelefono($new_dato)) {
-                        throw new Exception('Error al actualizar el teléfono: Teléfono inválido.');
-                    }
-                    $campo = 'telefono';
-                    break;
-    
-                default:
-                    throw new Exception('Tipo de dato inválido.');
+        public function show_address($id) {
+            $dato = array(':par1' => $id);
+        
+            $consulta = 'SELECT direccion, ciudad, cod_post, id_direccion 
+                         FROM direcciones
+                         WHERE id_usu = :par1';
+        
+            $stmt = $this->db->prepare($consulta);
+            $stmt->execute($dato);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        
+            $addresses = '';
+        
+            if ($stmt->rowCount() >= 1) {
+                while ($fila = $stmt->fetch()) {
+                    $addresses .= '
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card address-card h-100">
+                            <div class="card-body" id="'.$fila["id_direccion"].'">
+                                <h5 class="card-title">Dirección de Entrega</h5>
+                                <p class="card-text">'.$fila["direccion"].'</p>
+                                <p class="card-text">Ciudad: '.$fila["ciudad"].'</p>
+                                <p class="card-text">Código Postal: '.$fila["cod_post"].'</p>
+                            </div>
+                            <button type="button" 
+                                    class="m-1 btn btn-danger rounded-pill"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#mod_'.$fila['id_direccion'].'">
+                                Eliminar - <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+        
+                        <div class="modal fade" id="mod_'.$fila['id_direccion'].'" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Dirección</h1>
+                                        <a href="my_data.php" class="btn-close"></a>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="delete_'.$fila['id_direccion'].'_form" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="POST">
+                                            <div class="form-floating" id="log-block">
+                                                <p>¿Estás seguro de borrar esta dirección?</p>
+                                                <input type="hidden" name="id_direccion" value="'.$fila['id_direccion'].'">
+                                                <p>
+                                                <input type="checkbox" class="form-check-input" id="id_address_'.$fila['id_direccion'].'" name="confirm_delete" value="1">
+                                                <label class="form-check-label" for="id_address_'.$fila['id_direccion'].'">Estoy seguro</label></p>
+                                            </div>
+                                            <div id="form_message_'.$fila['id_direccion'].'" class="text-center"></div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="my_data.php"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button></a>
+                                        <button type="submit" form="delete_'.$fila['id_direccion'].'_form" class="btn btn-primary">Borrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>';
+                }
+        
+                return $addresses;
+            } else {
+                return false;
             }
-    
-            // Preparar y ejecutar la consulta de actualización
-            $datos = array(':par1' => $new_dato, ':par2' => $id);
-            $update = "UPDATE usuarios SET $campo = :par1 WHERE id_usuario = :par2";
-            $stmt = $this->db->prepare($update);
-            return $stmt->execute($datos);
-    
-        } catch (Exception $e) {
-            echo "¡Error!: " . $e->getMessage() . "<br>";
+        }
+        
+        public function elim_address($id_address){
+
+            try{
+                $datos = array(':par1' => $id_address);
+
+                $update = ' DELETE FROM direcciones
+                            WHERE id_direccion = :par1';
+
+                $stmt = $this->db->prepare($update);
+                return $stmt->execute($datos);
+
+            } catch(PDOExceptions $e){
+                echo "¡Error!: ".$e->getMessage()."</br>";
+                echo "¡Error al actualizar borrar la direccion!</br>";
+            }
+        }
+
+        public function dar_baja($id){
+            try{
+                $datos = array(':par1' => $id);
+
+                $update = ' UPDATE usuarios 
+                            SET baja = 1
+                            WHERE id_usuario = :par1';
+
+                $stmt = $this->db->prepare($update);
+                return $stmt->execute($datos);
+
+            } catch(PDOExceptions $e){
+                echo "¡Error!: ".$e->getMessage()."</br>";
+                echo "¡Error al actualizar el nombre!</br>";
+            }
         }
     }
-    
-    function validateFechaNacimiento($fecha_nacimiento) {
-        if (empty($fecha_nacimiento)) return false;
-        $fecha = new DateTime($fecha_nacimiento);
-        $hoy = new DateTime();
-        $edad = $hoy->diff($fecha)->y;
-        return $edad >= 18;
-    }
-    
-    function validateTelefono($telefono) {
-        return !empty($telefono) && preg_match("/^\d{9}$/", $telefono);
-    }*/
 
 ?>

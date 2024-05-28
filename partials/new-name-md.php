@@ -12,11 +12,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Editar Nombre</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <a href="my_data.php" class="btn-close"></a>
             </div>
             <div class="modal-body">
-                <form id="edit_name_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-                    <!--FORMULARIO-->
+                <form id="edit_name_form" action="my_data.php" method="POST">
                     <div class="form-floating" id="log-block">
                         <input type="text" class="form-control" id="new_name" name="new_name" placeholder="Nuevo nombre" required>
                         <label for="new_name">Nuevo nombre</label>
@@ -26,8 +25,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="submit" form="edit_name_form" class="btn btn-primary" id="apply_button">Aplicar</button>
+                <a href="my_data.php"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button></a>
+                <button type="submit" form="edit_name_form" class="btn btn-primary">Aplicar</button>
             </div>
         </div>
     </div>

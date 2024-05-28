@@ -15,9 +15,10 @@
                 </button>
             </div>
             
-            <form class="w-100 m-1" role="search">
-                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+            <form class="w-100 m-1" role="search" action="result.php" method="get">
+                <input type="search" class="form-control" name="keyword" placeholder="Search..." aria-label="Search">
             </form>
+
 
             <?php        
                 if (isset($_SESSION['id'])) {
@@ -27,7 +28,7 @@
                             <i class="bi bi-person-fill-check" id="icono"></i>
                         </a>
                         <ul class="dropdown-menu text-small shadow" style="">
-                            <li><p class="dropdown-item active" href="#">Bienvenido/a '.$_SESSION['nombre'].'</p></li>
+                            <li><p class="dropdown-item active">Bienvenido/a '.$_SESSION['nombre'].'</p></li>
                             <li><a class="dropdown-item" href="my_data.php">Mis Datos</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="logout.php">Log-Out</a></li>
@@ -49,7 +50,7 @@
                 } 
             ?>
             <div class="m-1">
-                <a class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                <a class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-body-emphasis text-decoration-none" href="cart.php">
                     <i class="bi bi-cart-fill" id="icono"></i>
                     <!--<i class="bi bi-cart-check-fill id="icono""></i>-->
                 </a>
@@ -59,22 +60,14 @@
 
         <div class="container-fluid">
             <div class="navbar-collapse collapse" id="navbarsExample01" style="">
-            <ul class="navbar-nav me-auto mb-2">
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                </li>
-                <?php echo'<li class="nav-item"><a class="nav-link active" aria-current="page" href="#" >Esto sera generado con PHP</a></li>'?>
-            </ul>
+                <?php require_once('includes/Search.php'); ?>
+                <?php $search = new Search(); ?>
+                <?php echo $search->show_categories(); ?>
+                <ul class="navbar-nav me-auto mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Categorias</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
