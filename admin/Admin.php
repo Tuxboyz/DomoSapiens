@@ -1,8 +1,5 @@
 <?php
     require_once("../includes/Config.php");
-    function barrer($data) {
-        return trim(htmlspecialchars($data));
-    }
     class Admin{
         protected $db;
 
@@ -110,7 +107,7 @@
                                     <td>' . $producto['stock'] . '</td>
                                     <td>' . $producto['precio'] . '</td>
                                     <td>' . $producto['iva'] . '</td>
-                                    <td><img src="' . $producto['imagen_ruta'] . '" alt="Imagen del producto" style="max-width: 100px; max-height: 100px;"></td>
+                                    <td>'. $producto['imagen_ruta'] . '</td>
                                     <td>' . $producto['tipo_promo'] . '</td>
                                     <td>' . $producto['cantidad_vendida'] . '</td>
                                     <td> 
@@ -170,7 +167,7 @@
         
                 if ($stmt->rowCount() > 0) {
                     $promociones = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    $html = '<option value="">Ninguna</option>';
+                    $html = '<option value="" selected>Selecciona una promoción (opcional)</option>';
         
                     foreach ($promociones as $promocion) {
                         $html .= '<option value="' . htmlspecialchars($promocion['tipo_promo']) . '">Tipo: ' . 

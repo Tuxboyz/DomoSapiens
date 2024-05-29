@@ -1,10 +1,6 @@
 <?php
 
     require_once("Config.php");
-
-    function barrer($data) {
-        return trim(htmlspecialchars($data));
-    }
     
     class Search{
         protected $db;

@@ -132,7 +132,6 @@
                     <div class="mb-3">
                         <label for="promo" class="form-label">Tipo de Promocion:</label>
                         <select class="form-control" id="promo" name="promo" placeholder="Selecciona la nueva promocion (es opcional)">
-                            <option value="" selected>Selecciona una promoción (opcional)</option>
                             <?php echo $promociones ;?>
                         </select>
                         <div class="invalid-feedback">Es opcional.</div>

@@ -2,10 +2,6 @@
 
     require_once("Config.php");
 
-    function barrer($data) {
-        return trim(htmlspecialchars($data));
-    }
-
     // Funciones de validación
         function validateNombre($nombre) {
             return !empty($nombre) && preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/", $nombre) && strlen($nombre) >= 3;
