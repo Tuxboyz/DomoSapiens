@@ -1,4 +1,11 @@
-<?php session_start();?>
+<?php 
+    session_start();
+
+    if(isset($_SESSION['nombre'])){
+        header("Location: index.php");
+        exit;
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -35,7 +42,6 @@
 </head>
 <body>
     <header class="py-3 mb-3 border-bottom"><?php include_once 'partials/header.php';?></header>
-    <?php if (!isset($_SESSION['id'])){ ?>
         <main class="form-signin w-100 m-auto" id="form">
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" >
                 <div class="text-center" id="log-block">
@@ -136,20 +142,6 @@
                 ?>
             </div>
         </main>
-    <?php } else { ?>
-        <div class="container my-5">
-            <div class="my-5 bg-body-tertiary p-5 rounded">
-                <div class="col-sm-8 py-5 mx-auto text-center">
-                    <h2>Ya has inciado sesion.</h2>
-                </div>
-            </div>
-
-            <div class="text-center"><p>Si quieres volver a la paguina de incicio puedes darle <a href="index.php">aquí</a></p></div>
-            <div class="text-center"><p>Si quieres acceder a tu panel de control dale <a href="my_data.php">aquí</a></p></div>
-            <div class="text-center"><p>Si necesitas ayuda puedes darle <a href="faq.php">aquí</a></p></div>
-            
-        </div>
-    <?php } ?>
     <script src="scripts/bootstrap.bundle.min.js"></script>
     <script src="scripts/validation-create.js"></script>
 

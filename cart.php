@@ -1,4 +1,13 @@
-<?php session_start(); ?>
+<?php 
+    session_start();
+    if(!isset($_SESSION['nombre'])){
+        header("Location: login.php");
+        exit;
+    } else {
+        $conn = new Usuario();
+        $data = $conn->get_data($_SESSION['id']);
+    }
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,59 +33,31 @@
     </header>
 
     <main>
-        <?php if (isset($_SESSION['nombre'])) { $conn = new Usuario();$data = $conn->get_data($_SESSION['id']);?>
-            <div class='container'>
-                <div class="row">
-                    <div class="col-3 text-center">
-                        <i class="bi bi-cart-fill" id="icono"></i>
-                    </div>
+        <div class='container'>
+            <div class="row">
+                <div class="col-3 text-center">
+                    <i class="bi bi-cart-fill" id="icono"></i>
+                </div>
 
-                    <div class="col-9 d-flex align-items-center justify-content-center">
-                        <h3>Bienvenido <?php echo $data['nombre']?> a tu Carrito de la compra.</h3>
-                    </div>
+                <div class="col-9 d-flex align-items-center justify-content-center">
+                    <h3>Bienvenido <?php echo $data['nombre']?> a tu Carrito de la compra.</h3>
+                </div>
 
-                    <div class="col-12">
-                        <div class="container my-5">
-                            <div class="bg-body-tertiary p-5 rounded">
-                                <div class="col-sm-8 py-5 mx-auto text-center">
-                                    <p class="fs-5">¿Que quieres <a href="index.php">comprar</a>?</p>
-                                </div>
+                <div class="col-12">
+                    <div class="container my-5">
+                        <div class="bg-body-tertiary p-5 rounded">
+                            <div class="col-sm-8 py-5 mx-auto text-center">
+                                <p class="fs-5">¿Que quieres <a href="index.php">comprar</a>?</p>
                             </div>
                         </div>
-                        <div class="form-check text-center my-5">
-                            ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
-                        </div>
                     </div>
-
+                    <div class="form-check text-center my-5">
+                        ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
+                    </div>
                 </div>
+
             </div>
-        <?php } else {?>
-            <div class='container'>
-                <div class="row">
-                    <div class="col-3 text-center">
-                        <i class="bi bi-cart-fill" id="icono"></i>
-                    </div>
-
-                    <div class="col-9 d-flex align-items-center justify-content-center">
-                        <h3>Tienes que iniciar sesion para poder comprar.</h3>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="container my-5">
-                            <div class="bg-body-tertiary p-5 rounded">
-                                <div class="col-sm-8 py-5 mx-auto text-center">
-                                    <p class="fs-5">Inicia sesion <a href="login.php">aqui</a>.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-check text-center my-5">
-                            ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        <?php }?>
+        </div>
     </main>
 
     <footer class="footer mt-auto">

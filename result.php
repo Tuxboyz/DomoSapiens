@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php 
+    session_start();
+    if ($_SERVER["REQUEST_METHOD"] !== "GET" || !isset($_GET['keyword'])) {
+        header('Location: index.php');
+        exit();
+    } 
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -49,7 +55,7 @@
 
                 if (empty($keyword)) {
                     // Si está vacío
-                    ?>
+        ?>
                     <div class='container'>
                         <h2 class="mb-3">No se proporcionó una palabra clave para la búsqueda.</h2>
                         <div class="row">
@@ -70,12 +76,12 @@
                             </div>
                         </div>
                     </div>
-                    <?php
+        <?php
                 } else {
                     // Si hay resultados
                     $results = $search->searcher($keyword);
                     if ($results) {
-                        ?>
+        ?>
                         <h2 class="mb-3">Resultados de "<?php echo $keyword ?>"</h2>
                         <div class="row">
                             <div class="col-md-3 filter-section">
@@ -98,20 +104,21 @@
                                     <button class="btn btn-outline-primary">Orden alfabético</button><!--filtrar por orden alfabetico-->
                                 </div>
                                 <div class="product-grid">
-                                    <?php 
+        <?php 
                                     foreach ($results as $r) { $mini = new Search();$info = $search->show_mini_prod($r);
                                         echo '<a href="product.php?id_product='. $r .'">
                                                 <div class="product-card">
                                                     '.$info.'
                                                 </div>
-                                             </a>'; } ?>
+                                             </a>'; } 
+        ?>
                                 </div>
                             </div>
                         </div>
-                        <?php
+        <?php
                     } else {
                         // Si no hay resultados con esa palabra
-                        ?>
+        ?>
                             <div class='container'>
                                 <h2 class="mb-3">No se encontraron resultados de "<?php echo $keyword; ?>"</h2>
                                 <div class="row">
@@ -132,7 +139,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <?php
+        <?php
                     }
                 }
             }

@@ -1,7 +1,14 @@
 <?php
-session_start();
-require_once('includes/Config.php');
-require_once('includes/Usuario.php');
+    session_start();
+    require_once('includes/Config.php');
+    require_once('includes/Usuario.php');
+    if(!isset($_SESSION['nombre'])){
+        header("Location: login.php");
+        exit;
+    } else {
+        $conn = new Usuario();
+        $data = $conn->get_data($_SESSION['id']);
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -65,8 +72,6 @@ require_once('includes/Usuario.php');
     </header>
 
     <main>
-        <?php if ((isset($_SESSION['nombre']))&&(($_SESSION['usuario']) != 1)) { $conn = new Usuario();$data = $conn->get_data($_SESSION['id']);?>
-
         <div class='container'>
             <div class="row">
                 <div class="col-3 text-center">
@@ -159,16 +164,6 @@ require_once('includes/Usuario.php');
 
             </div>
         </div>
-        <?php } else { ?>
-        <div class='container'>
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h2>No se puede acceder a esta pagina sin iniciar sesion como usuario.</h2>
-                </div>
-            </div>
-        </div>
-
-        <?php } ?>
     </main>
 
     <footer class="footer mt-auto">

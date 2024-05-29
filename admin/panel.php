@@ -1,9 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['nombre_admin'])){
-    header("Location: login.php");
-    exit;
-}
+
 include_once('../includes/Config.php');
 include_once('Admin.php');
 ?>

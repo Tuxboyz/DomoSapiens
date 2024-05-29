@@ -1,6 +1,11 @@
 <?php
     session_start();
 
+    if(isset($_SESSION['nombre'])){
+        header("Location: index.php");
+        exit;
+    }
+
     require_once('includes/Config.php');
     require_once('includes/Usuario.php');
 
@@ -85,7 +90,6 @@
     <header class="py-3 mb-3 border-bottom">
         <?php require_once 'partials/header.php'; ?>
     </header>
-<?php if (!isset($_SESSION['id'])){ ?>
     <main class="form-signin w-100 m-auto" id="form">
         <form action="login.php" method="post">
             <div class="text-center" id="log-block">
@@ -123,20 +127,6 @@
             ?>
         </div>
     </main>
-<?php } else { ?>
-    <div class="container my-5">
-        <div class="my-5 bg-body-tertiary p-5 rounded">
-            <div class="col-sm-8 py-5 mx-auto text-center">
-                <h2>Ya has inciado sesion.</h2>
-            </div>
-        </div>
-
-        <div class="text-center"><p>Si quieres volver a la paguina de incicio puedes darle <a href="index.php">aquí</a></p></div>
-        <div class="text-center"><p>Si quieres acceder a tu panel de control dale <a href="my_data.php">aquí</a></p></div>
-        <div class="text-center"><p>Si necesitas ayuda puedes darle <a href="faq.php">aquí</a></p></div>
-        
-    </div>
-<?php } ?>
 
     <footer class="footer mt-auto">
         <?php require_once 'partials/footer.php'; ?>
