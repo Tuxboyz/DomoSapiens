@@ -42,7 +42,8 @@
                             <i class="bi bi-person-fill" id="icono"></i>
                         </a>
                         <ul class="dropdown-menu text-small shadow" style="">
-                            <li><a class="dropdown-item active" href="login.php" aria-current="page">Login</a></li>
+                            <li><a class="dropdown-item " href="login.php" aria-current="page">Iniciar Sesion</a></li>
+                            <li><a class="dropdown-item " href="create_acc.php" aria-current="page">Crear Cuenta</a></li>
                         </ul>
                     </div>
                     ';
@@ -63,11 +64,6 @@
                 <?php require_once('includes/Search.php'); ?>
                 <?php $search = new Search(); ?>
                 <?php echo $search->show_categories(); ?>
-                <ul class="navbar-nav me-auto mb-2">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Categorias</a>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

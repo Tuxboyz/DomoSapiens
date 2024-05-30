@@ -4,8 +4,11 @@
         header("Location: login.php");
         exit;
     } else {
+        include_once 'includes/Usuario.php';
+        include_once 'includes/Carrito.php';
         $conn = new Usuario();
         $data = $conn->get_data($_SESSION['id']);
+        $conn2 = new Carrito();
     }
 ?>
 <!DOCTYPE html>
@@ -28,8 +31,7 @@
 </head>
 <body>
     <header class="py-3 mb-3 border-bottom">
-        <?php include_once 'partials/header.php';
-              include_once 'includes/Usuario.php';?>
+        <?php include_once 'partials/header.php';?>
     </header>
 
     <main>
@@ -42,12 +44,12 @@
                 <div class="col-9 d-flex align-items-center justify-content-center">
                     <h3>Bienvenido <?php echo $data['nombre']?> a tu Carrito de la compra.</h3>
                 </div>
-
+                
                 <div class="col-12">
                     <div class="container my-5">
                         <div class="bg-body-tertiary p-5 rounded">
                             <div class="col-sm-8 py-5 mx-auto text-center">
-                                <p class="fs-5">¿Que quieres <a href="index.php">comprar</a>?</p>
+                                <?php $items = $conn2->mostrarCarrito($_SESSION['id']);?>
                             </div>
                         </div>
                     </div>

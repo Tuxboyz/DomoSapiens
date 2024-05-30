@@ -1,51 +1,58 @@
 <?php
-    require_once("../includes/Config.php");
-    class Admin{
+require_once("../includes/Config.php");
+    class Admin {
         protected $db;
 
-        function __construct(){
-            try{
-                $this->db = new PDO(BBDD_DSN, BBDD_USER, BBDD_PASSWORD);
-            } catch(PDOException $e){
-                die("¡Error del php Admin!: ".$e->getMessage()." </br>");
+        function __construct() {
+            /*
+            $host_name = 'db5015831002.hosting-data.io';
+            $database = 'dbs12907202';
+            $user_name = 'dbu5123221';
+            $password = '26303114Mm';*/
+        
+            try {
+                $this->db = new PDO(DNS,USER,PASS);
+                $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch (PDOException $e) {
+                echo "Error!: " . $e->getMessage() . "<br/>";
+                die();
             }
         }
 
-        public function getConBD(){
+        public function getConBD() {
             return $this->db;
         }
 
-        public function __destruct(){
-            $this->db = NULL;
+        public function __destruct() {
+            $this->db = null;
         }
 
-        public function validacion_admin($user,$pass){
-            try{
-                $datos = array(':par1'=>$user,':par2'=>$pass);
+        public function validacion_admin($user, $pass) {
+            try {
+                $datos = array(':par1' => $user, ':par2' => $pass);
                 $consulta = 'SELECT id_usuario, nombre_admin, admin 
                             FROM admins 
-                            WHERE    email = :par1
-                            AND  password = :par2
+                            WHERE email = :par1 
+                            AND password = :par2 
                             AND admin = 1';
                 $stmt = $this->db->prepare($consulta);
                 $stmt->execute($datos);
                 $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
-                if ($stmt->rowCount() == 1){
+                if ($stmt->rowCount() == 1) {
                     $fila = $stmt->fetch();
 
-                    $id = "{$fila["id_usuario"]}";
-                    $nombre_admin = "{$fila["nombre_admin"]}";
-                    $admin = "{$fila["admin"]}";
+                    $id = "{$fila['id_usuario']}";
+                    $nombre_admin = "{$fila['nombre_admin']}";
+                    $admin = "{$fila['admin']}";
 
-                    $datos = ["id"=>$id, "nombre_admin"=>$nombre_admin, "administrador"=> $admin];
+                    $datos = ["id" => $id, "nombre_admin" => $nombre_admin, "administrador" => $admin];
                     return $datos;
-
                 } else {
                     return false;
                 }
-            } catch (PDOException $e){
-                die("¡Error al validad el usuario!: ".$e->getMessage()." </br>");
+            } catch (PDOException $e) {
+                die("¡Error al validar el usuario!: " . $e->getMessage() . " </br>");
             }
         }
 
@@ -93,7 +100,7 @@
                                 <th>Stock</th>
                                 <th>Precio</th>
                                 <th>IVA</th>
-                                <th>Imagen</th>
+                                <th>Ruta Imagen</th>
                                 <th>Tipo de Promoción</th>
                                 <th>Cantidad Vendida</th>
                                 <th>Editar</th>
@@ -130,7 +137,7 @@
                     return '<p>No se encontraron productos.</p>';
                 }
             } catch(PDOException $e) {
-                die("¡Error del php usuario!: " . $e->getMessage() . " </br>");
+                die("¡Error del php Admin Show products!: " . $e->getMessage() . " </br>");
             }
         }
         
@@ -156,32 +163,6 @@
             } catch(PDOException $e) {
                 echo "¡Error!: " . $e->getMessage() . "</br>";
                 echo "¡Error al insertar el producto!</br>";
-            }
-        }
-
-        public function show_promo() {
-            try {
-                $consulta = 'SELECT tipo_promo, percent_promo FROM promociones';
-                $stmt = $this->db->prepare($consulta);
-                $stmt->execute();
-        
-                if ($stmt->rowCount() > 0) {
-                    $promociones = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    $html = '<option value="" selected>Selecciona una promoción (opcional)</option>';
-        
-                    foreach ($promociones as $promocion) {
-                        $html .= '<option value="' . htmlspecialchars($promocion['tipo_promo']) . '">Tipo: ' . 
-                                    htmlspecialchars($promocion['tipo_promo']) . ' (' . htmlspecialchars($promocion['percent_promo']) . '%)' . 
-                                 '</option>';
-                    }
-                    return $html;
-                } else {
-                    return '<p>No se encontraron tipos de promociones.</p>';
-                }
-        
-            } catch(PDOException $e) {
-                echo "¡Error!: " . $e->getMessage() . "</br>";
-                echo "¡Error al obtener los tipos de promociones!</br>";
             }
         }
         
@@ -211,7 +192,7 @@
             }
         }
 
-        public function edit_product($id_producto, $nombre, $descripcion, $stock, $precio, $iva, $imagen_ruta, $tipo_promo = null, $cantidad_vendida) {
+        public function edit_product($id_producto, $nombre, $descripcion, $stock, $precio, $iva, $imagen_ruta, $tipo_promo, $cantidad_vendida) {
             try {
                 $datos = array(
                     ':id_producto' => $id_producto,

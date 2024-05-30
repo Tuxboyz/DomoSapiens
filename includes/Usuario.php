@@ -37,7 +37,7 @@
 
         function __construct(){
             try{
-                $this->db = new PDO(BBDD_DSN, BBDD_USER, BBDD_PASSWORD);
+                $this->db = new PDO(DNS, USER, PASS);
             } catch(PDOException $e){
                 die("¡Error  del php usuario!: ".$e->getMessage()." </br>");
             }
@@ -97,11 +97,10 @@
         public function validacion($user,$pass){
             $datos = array(':par1'=>$user,':par2'=>$pass);
 
-            $consulta = 'SELECT id_usuario, nombre, baja
+            $consulta = 'SELECT id_usuario, nombre
                         FROM usuarios 
                         WHERE    email = :par1
-                        AND  password = :par2
-                        AND baja = 0';
+                        AND  password = :par2';
             $stmt = $this->db->prepare($consulta);
             $stmt->execute($datos);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -111,9 +110,8 @@
 
                 $id = "{$fila["id_usuario"]}";
                 $nombreCompleto = "{$fila["nombre"]}";
-                $baja = "{$fila["baja"]}";
 
-                $datos = ["id"=>$id, "nombre"=>$nombreCompleto,"usuario"=>$baja];
+                $datos = ["id"=>$id, "nombre"=>$nombreCompleto];
                 return $datos;
 
             } else {
@@ -383,8 +381,7 @@
             try{
                 $datos = array(':par1' => $id);
 
-                $update = ' UPDATE usuarios 
-                            SET baja = 1
+                $update = ' DELETE FROM usuarios 
                             WHERE id_usuario = :par1';
 
                 $stmt = $this->db->prepare($update);

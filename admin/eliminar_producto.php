@@ -1,4 +1,9 @@
 <?php
+session_start();
+    if(!isset($_SESSION['nombre_admin'])){
+        header("Location: index.php");
+        exit;
+    }
 include_once 'Admin.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id_producto_elim'])) {

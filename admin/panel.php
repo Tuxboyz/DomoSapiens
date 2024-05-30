@@ -1,6 +1,9 @@
 <?php
 session_start();
-
+if(!isset($_SESSION['nombre_admin'])){
+    header("Location: index.php");
+    exit;
+}
 include_once('../includes/Config.php');
 include_once('Admin.php');
 ?>
@@ -41,7 +44,7 @@ include_once('Admin.php');
                 </div>
 
                 <div class="col-2 d-flex align-items-center justify-content-center">
-                    <a href="logout.php" ><i class="bi bi-box-arrow-right"></i></a>
+                    <a href="logout.php" ><i class="bi bi-box-arrow-right"id="icono_data"></i></a>
                 </div>
 
                 <div class="col-12">

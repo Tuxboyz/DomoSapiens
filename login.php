@@ -40,7 +40,6 @@
             } else {
                 $_SESSION['id'] = $test['id'];
                 $_SESSION['nombre'] = $test['nombre'];
-                $_SESSION['usuario'] = $test['baja'];
                 
                 sleep(2);
                 header('Location: index.php');
@@ -109,7 +108,7 @@
                 <span class="text-danger"></span>
             </div>
 
-            <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+            <button class="btn btn-primary w-100 py-2" type="submit">Iniciar Sesion</button>
 
             <div class="text-center m-3">
                 No tienes cuenta, créate una <a href="create_acc.php">aquí</a>!

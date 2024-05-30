@@ -1,5 +1,9 @@
-<?php 
-
+<?php
+session_start();
+    if(!isset($_SESSION['nombre_admin'])){
+        header("Location: index.php");
+        exit;
+    }
     include_once 'Admin.php';
     $conn = new Admin();
     $errores = [];
@@ -15,7 +19,6 @@
 
         if (empty($errores)) {
             $dato = $conn->get_data_product($id);
-            $promociones = $conn->show_promo();
 
             if (isset($_POST['nombre'], $_POST['descripcion'], $_POST['stock'], $_POST['precio'], $_POST['iva'], $_POST['ruta'], $_POST['promo'], $_POST['vendidos'])) {
                 $nombre = barrer($_POST['nombre']);
@@ -111,7 +114,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="stock" class="form-label">Stock:</label>
-                        <input type="number" class="form-control" id="stock" name="stock" min="1" max="9999" placeholder="Introduce la nueva cantidad de stock disponible." value="<?php echo htmlspecialchars($dato['stock'] ?? ''); ?>" required="">
+                        <input type="number" class="form-control" id="stock" name="stock" min="0" max="9999" placeholder="Introduce la nueva cantidad de stock disponible." value="<?php echo htmlspecialchars($dato['stock'] ?? ''); ?>" required="">
                         <div class="invalid-feedback">Es necesario poner la cantidad de stock (usar solo valores numericos).</div>
                     </div>
                     <div class="mb-3">
@@ -121,7 +124,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="iva" class="form-label">IVA:</label>
-                        <input type="number" class="form-control" id="iva" name="iva" min="1" max="100" placeholder="Introduce el nuevo IVA que va a tener el producto" value="<?php echo htmlspecialchars($dato['iva'] ?? ''); ?>" required="">
+                        <input type="number" class="form-control" id="iva" name="iva" min="0" max="100" placeholder="Introduce el nuevo IVA que va a tener el producto" value="<?php echo htmlspecialchars($dato['iva'] ?? ''); ?>" required="">
                         <div class="invalid-feedback">Es necesario poner el IVA que va a tener el producto (usar solo valores numericos).</div>
                     </div>
                     <div class="mb-3">
@@ -132,19 +135,23 @@
                     <div class="mb-3">
                         <label for="promo" class="form-label">Tipo de Promocion:</label>
                         <select class="form-control" id="promo" name="promo" placeholder="Selecciona la nueva promocion (es opcional)">
-                            <?php echo $promociones ;?>
+                            <option value="" selected>Selecciona una promoción (opcional)</option>
+                            <option value="5">5% Descuento</option>
+                            <option value="10">10% Descuento</option>
+                            <option value="15">15% Descuento</option>
+                            <option value="20">20% Descuento</option>
                         </select>
                         <div class="invalid-feedback">Es opcional.</div>
                     </div>
                     <div class="mb-3">
                         <label for="vendidos" class="form-label">Cantidad vendida:</label>
-                        <input type="number" class="form-control" id="vendidos" name="vendidos" min="1" max="999999" placeholder="Introduce la nueva cantidad de productos vendidos" value="<?php echo htmlspecialchars($dato['cantidad_vendida'] ?? ''); ?>" required="">
+                        <input type="number" class="form-control" id="vendidos" name="vendidos" min="0" max="999999" placeholder="Introduce la nueva cantidad de productos vendidos" value="<?php echo htmlspecialchars($dato['cantidad_vendida'] ?? ''); ?>" required="">
                         <div class="invalid-feedback">Es necesaria la cantidad de productos vendidos(usar solo valores numericos).</div>
                     </div>
 
                     <div id="form_message_addprod" class="text-center"></div>
                     <button type="submit" form="edit_form" class="btn btn-primary">Aplicar</button>
-                    <a href="panel.php" class="btn btn-secondary">Cancelar</a>
+                    <a href="panel.php" class="btn btn-secondary">Salir</a>
                 </form>
             </div>
         </main>

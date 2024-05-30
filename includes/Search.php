@@ -7,9 +7,9 @@
 
         function __construct(){
             try{
-                $this->db = new PDO(BBDD_DSN, BBDD_USER, BBDD_PASSWORD);
+                $this->db = new PDO(DNS, USER, PASS);
             } catch(PDOException $e){
-                die("¡Error  del php usuario!: ".$e->getMessage()." </br>");
+                die("¡Error del php usuario!: ".$e->getMessage()." </br>");
             }
         }
 

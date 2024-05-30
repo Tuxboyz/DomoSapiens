@@ -1,12 +1,10 @@
 <?php
 if(!isset($_SESSION['nombre_admin'])){
-    header("Location: login.php");
+    header("Location: indexc.php");
     exit;
 }
-    $conn = new Admin();
-    $promos = $conn->show_promo();
 ?>
-<form class="needs-validation was-validated" novalidate="" id="address_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+<form class="needs-validation was-validated m-5" novalidate="" id="address_form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
     <div class="mb-3">
         <label for="nombre" class="form-label">Nombre:</label>
         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Introduce el nombre del producto." value="" required="">
@@ -19,7 +17,7 @@ if(!isset($_SESSION['nombre_admin'])){
     </div>
     <div class="mb-3">
         <label for="stock" class="form-label">Stock:</label>
-        <input type="number" class="form-control" id="stock" name="stock" min="1" max="9999" placeholder="Introduce la cantidad de stock disponible." value="" required="">
+        <input type="number" class="form-control" id="stock" name="stock" min="0" max="9999" placeholder="Introduce la cantidad de stock disponible." value="" required="">
         <div class="invalid-feedback">Es necesario poner la cantidad de stock (usar solo valores numericos).</div>
     </div>
     <div class="mb-3">
@@ -29,7 +27,7 @@ if(!isset($_SESSION['nombre_admin'])){
     </div>
     <div class="mb-3">
         <label for="iva" class="form-label">IVA:</label>
-        <input type="number" class="form-control" id="iva" name="iva" min="1" max="100" placeholder="Introduce el IVA que va a tener el producto" value="" required="">
+        <input type="number" class="form-control" id="iva" name="iva" min="0" max="100" placeholder="Introduce el IVA que va a tener el producto" value="" required="">
         <div class="invalid-feedback">Es necesario poner el IVA que va a tener el producto (usar solo valores numericos).</div>
     </div>
     <div class="mb-3">
@@ -40,17 +38,24 @@ if(!isset($_SESSION['nombre_admin'])){
     <div class="mb-3">
         <label for="promo" class="form-label">Tipo de Promocion:</label>
         <select class="form-control" id="promo" name="promo" placeholder="Selecciona la nueva promocion (es opcional)">
-            <?php echo $promos;?>
+            <option value="" selected>Selecciona una promoción (opcional)</option>
+            <option value="5">5% Descuento</option>
+            <option value="10">10% Descuento</option>
+            <option value="15">15% Descuento</option>
+            <option value="20">20% Descuento</option>
         </select>
         <div class="invalid-feedback">Es opcional.</div>
     </div>
     <div class="mb-3">
         <label for="vendidos" class="form-label">Cantidad vendida:</label>
-        <input type="number" class="form-control" id="vendidos" name="vendidos" min="1" max="999999" placeholder="introduce la cantidad de productos vendidos" value="" required="">
+        <input type="number" class="form-control" id="vendidos" name="vendidos" min="0" max="999999" placeholder="introduce la cantidad de productos vendidos" value="" required="">
         <div class="invalid-feedback">Es necesaria la cantidad de productos vendidos(usar solo valores numericos).</div>
     </div>
     <div id="form_message_addprod" class="text-center"></div>
-    <button type="submit" form="address_form" class="btn btn-primary">Aplicar</button>
+    <div class="text-center m-5">
+        <button type="submit" form="address_form" class="btn btn-primary">Aplicar</button>
+        <a href="panel.php" class="btn btn-secondary">Salir</a>
+    </div>
 </form>
 <?php
 
@@ -72,19 +77,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre'])) {
     if(empty($descripcion)){
         $errores[] = 'No has añadido una descripcion del producto.';
     }
-    if(empty($stock)){
+    if(empty($stock) && ($stock != 0)){
         $errores[] = 'No has añadido una stock para producto.';
     }
     if(empty($precio)){
         $errores[] = 'No has seleccionado un precio para el producto.';
     }
-    if(empty($iva)){
+    if(empty($iva) && ($iva != 0)){
         $errores[] = 'No has seleccionado una cantidad de IVA para el producto.';
     }
     if(empty($ruta)){
         $errores[] = 'No has añadido una ruta para las imagenes';
     }
-    if(empty($vendidos)){
+    if(empty($vendidos) && ($vendidos != 0)){
         $errores[] = 'No has puesto una cantidad de productos vendidos.';
     }
     if (!empty($errores)) {
@@ -110,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['nombre'])) {
 
         $conn = new Admin();
         $test = $conn->new_product($nombre, $descripcion, $stock ,$precio, $iva, $ruta, $vendidos, $tipo_promo);
-        
+
         echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
 
