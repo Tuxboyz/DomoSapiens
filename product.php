@@ -74,23 +74,23 @@ include_once 'includes/Search.php';
                         </div>
                         <div class="col-md-6">
                             <div class="product-info">
-                                <h5><?php echo htmlspecialchars($product_info['nombre']); ?></h5>
-                                <p>Stock: <?php echo $product_info['stock'] > 5 ? 'Disponible' : ($product_info['stock'] == 0 ? 'No queda stock' : 'Quedan ' . htmlspecialchars($product_info['stock'])); ?></p>
-                                <p>Precio: <?php echo htmlspecialchars($product_info['precio']); ?>€</p>
-                                <p>IVA: <?php echo htmlspecialchars($product_info['iva']); ?>€</p>
-                                <p>Precio total: <?php echo htmlspecialchars($product_info['precio'] + $product_info['iva']); ?>€</p>
+                                <h5><?php echo $product_info['nombre']; ?></h5>
+                                <p>Stock: <?php echo $product_info['stock'] > 5 ? 'Disponible' : ($product_info['stock'] == 0 ? 'No queda stock' : 'Quedan ' . $product_info['stock']); ?></p>
+                                <p>Precio sin iva: <?php echo number_format($product_info['precio'],2); ?>€</p>
+                                <p>IVA: <?php $iva = $product_info['precio'] * $product_info['iva'] / 100;echo number_format($iva,2); ?>€</p>
+                                <p>Precio total: <?php $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);echo number_format($precio_con_iva,2); ?>€</p>
                                 
                                 <!-- Formulario para añadir al carrito -->
                                 <form action="partials/temp.php" method="post">
                                     <input type="hidden" name="accion" value="add">
-                                    <input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($id); ?>">
+                                    <input type="hidden" name="id_producto" value="<?php echo $id; ?>">
                                     <button type="submit" class="btn btn-cart">Añadir al carrito</button>
                                 </form>
 
                                 <!-- Formulario para comprar -->
                                 <form action="partials/temp.php" method="post">
                                     <input type="hidden" name="accion" value="buy">
-                                    <input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($id); ?>">
+                                    <input type="hidden" name="id_producto" value="<?php echo $id; ?>">
                                     <button type="submit" class="btn btn-buy">Comprar</button>
                                 </form>
                             </div>
@@ -99,7 +99,7 @@ include_once 'includes/Search.php';
                     <div class="row">
                         <div class="col-12">
                             <div class="product-description">
-                                <p><?php echo htmlspecialchars($product_info['descripcion']); ?></p>
+                                <p><?php echo $product_info['descripcion']; ?></p>
                             </div>
                         </div>
                     </div>

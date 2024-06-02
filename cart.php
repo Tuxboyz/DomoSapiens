@@ -42,14 +42,18 @@
                 </div>
 
                 <div class="col-9 d-flex align-items-center justify-content-center">
-                    <h3>Bienvenido <?php echo $data['nombre']?> a tu Carrito de la compra.</h3>
+                    <h3>Bienvenido/a <?php echo $data['nombre']?> a tu Carrito de la compra.</h3>
                 </div>
                 
                 <div class="col-12">
                     <div class="container my-5">
                         <div class="bg-body-tertiary p-5 rounded">
                             <div class="col-sm-8 py-5 mx-auto text-center">
-                                <?php $items = $conn2->mostrarCarrito($_SESSION['id']);?>
+                                    <?php 
+                                        echo'<form action="buy.php" method="post" id="comprar">';
+                                        $items = $conn2->mostrarCarrito($_SESSION['id']);
+                                        echo'</form>';
+                                    ?>
                             </div>
                         </div>
                     </div>
@@ -66,6 +70,20 @@
         <?php include_once 'partials/footer.php';?>
     </footer>
 
+    <script>
+        function incrementQuantity(productId) {
+            var input = document.querySelector(`input[name="cantidades[${productId}]"]`);
+            input.value = parseInt(input.value) + 1;
+        }
+
+        function decrementQuantity(productId) {
+            var input = document.querySelector(`input[name="cantidades[${productId}]"]`);
+            if (input.value > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+    </script>
+    
     <script src="scripts/bootstrap.bundle.min.js"></script>
 </body>
 </html>

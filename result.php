@@ -78,7 +78,6 @@
                     </div>
         <?php
                 } else {
-                    // Si hay resultados
                     $results = $search->searcher($keyword);
                     if ($results) {
         ?>
@@ -117,7 +116,6 @@
                         </div>
         <?php
                     } else {
-                        // Si no hay resultados con esa palabra
         ?>
                             <div class='container'>
                                 <h2 class="mb-3">No se encontraron resultados de "<?php echo $keyword; ?>"</h2>

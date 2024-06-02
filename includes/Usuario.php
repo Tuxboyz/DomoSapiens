@@ -392,6 +392,37 @@
                 echo "¡Error al actualizar el nombre!</br>";
             }
         }
-    }
 
+        public function select_address($id) {
+            $dato = array(':par1' => $id);
+        
+            $consulta = 'SELECT direccion, ciudad, cod_post, id_direccion 
+                         FROM direcciones
+                         WHERE id_usu = :par1';
+        
+            $stmt = $this->db->prepare($consulta);
+            $stmt->execute($dato);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        
+            $addresses = '<select class="form-select" id="ciudad" name="ciudad" required><option value="">Seleccione una opción</option>';
+        
+            if ($stmt->rowCount() >= 1) {
+                while ($fila = $stmt->fetch()) {
+                    $addresses .= '<option value="' . htmlspecialchars($fila["id_direccion"]) . '">' . 
+                                  htmlspecialchars($fila["direccion"]) . ', ' . 
+                                  htmlspecialchars($fila["ciudad"]) . ' ' . 
+                                  htmlspecialchars($fila["cod_post"]) . '</option>';
+                }
+                $addresses .= '</select>';
+            } else {
+                $addresses = false;
+            }
+        
+            return $addresses;
+        }
+    }
 ?>
+
+
+
+

@@ -52,8 +52,19 @@
             ?>
             <div class="m-1">
                 <a class="d-flex align-items-center col-lg-4 mb-2 mb-lg-0 link-body-emphasis text-decoration-none" href="cart.php">
-                    <i class="bi bi-cart-fill" id="icono"></i>
-                    <!--<i class="bi bi-cart-check-fill id="icono""></i>-->
+                    <?php 
+
+                        include_once 'includes/Carrito.php';
+                        $con2 = new Carrito();
+
+                        if (!isset($_SESSION['id'])){
+                            echo '<i class="bi bi-cart-fill" id="icono"></i>';
+                        } else {
+                            $count = $con2->item_count($_SESSION['id']);
+                            if (!$count){ echo '<i class="bi bi-cart-fill" id="icono"></i>';} else { echo '<i class="bi bi-cart-check-fill" id="icono"></i>';}
+                        }
+                        
+                    ?>
                 </a>
             </div>
 

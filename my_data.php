@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="col-9 d-flex align-items-center justify-content-center">
-                    <h3>Bienvenido <?php echo $data['nombre']?> a tu panel de control.</h3>
+                    <h3>Bienvenido/a <?php echo $data['nombre']?> a tu panel de control.</h3>
                 </div>
 
                 <div class="col-12">
