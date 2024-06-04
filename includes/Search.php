@@ -23,7 +23,7 @@
         
         public function show_categories(){
             try{
-                $consulta = 'SELECT nombre FROM categoria';
+                $consulta = 'SELECT id_categoria, nombre FROM categoria';
                 $stmt = $this->db->prepare($consulta);
                 $stmt->execute();
         
@@ -34,7 +34,7 @@
 
                     while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         $categorias_html .= '<li class="nav-item">';
-                        $categorias_html .= '<a class="nav-link active" href="#">' . $fila["nombre"] . '</a>';
+                        $categorias_html .= '<a class="nav-link active" href="result.php?categoria=' . $fila["id_categoria"] . '">' . $fila["nombre"] . '</a>';
                         $categorias_html .= '</li>';
                     }
         
@@ -50,6 +50,39 @@
             } catch(PDOExceptions $e){
                 echo "¡Error!: ".$e->getMessage()."</br>";
                 echo "¡Error al mostrar categorías!</br>";
+            }
+        }
+
+        public function categories_searcher($id_categoria) {
+            try {
+                // Validar que el ID de la categoría es un número
+                if (!is_numeric($id_categoria)) {
+                    throw new Exception("El ID de la categoría debe ser un número.");
+                }
+        
+                // Preparar y ejecutar la consulta
+                $query = "
+                    SELECT p.id_producto
+                    FROM productos p
+                    JOIN productos_categorias pc ON p.id_producto = pc.id_producto
+                    WHERE pc.id_categoria = :id_categoria
+                ";
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+                $stmt->execute();
+        
+                $results = array();
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $results[] = $row['id_producto'];
+                }
+        
+                return array_unique($results);
+        
+            } catch (PDOException $e) {
+                echo "¡Error!: " . $e->getMessage() . "</br>";
+                echo "¡Error al realizar la búsqueda!</br>";
+            } catch (Exception $e) {
+                echo "¡Error!: " . $e->getMessage() . "</br>";
             }
         }
 
@@ -80,7 +113,7 @@
 
         public function show_mini_prod($id) {
             try {
-                $query = 'SELECT nombre, precio, iva, imagen_ruta
+                $query = 'SELECT nombre, precio, iva, ruta
                           FROM productos 
                           WHERE id_producto = :id';
                 $stmt = $this->db->prepare($query);
@@ -90,10 +123,10 @@
         
                 if ($product_info) {
                     $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);
-                    $texto = '<div style="background-color: #f7e6a7; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center;">
-                                <img src="' . $product_info['imagen_ruta'] . '" alt="Imagen del producto" style="max-width: 100%; max-height: 100%;">
+                    $texto = '<div class="imagen">
+                                <img src="' . $product_info['ruta'] . '" alt="Imagen del producto" style="max-width: 100%; max-height: 100%;">
                               </div>
-                              <div style="margin-left: 20px;">
+                              <div>
                                 <div>' . $product_info['nombre'] . '</div>
                                 <div>' . number_format($precio_con_iva, 2) . '$</div>
                               </div>';
@@ -107,7 +140,6 @@
             }
         }
         
-
         public function product_inf($id) {
             try {
                 $query = 'SELECT nombre, descripcion, stock, 
@@ -126,31 +158,61 @@
                 echo "¡Error al mostrar producto!</br>";
             }
         }
+
+        public function show_product_photos($id) {
+            try {
+                // Obtener la ruta de la imagen del producto desde la base de datos
+                $query = 'SELECT imagen_ruta FROM productos WHERE id_producto = :id';
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+                if ($result) {
+                    $image_path = $result['imagen_ruta'];
+        
+                    // Asegurarse de que la ruta sea absoluta usando la constante PROJECT_ROOT
+                    $absolute_image_path = PROJECT_ROOT . $image_path;
+        
+                    // Verificar si el directorio existe y es accesible
+                    if (is_dir($absolute_image_path)) {
+                        // Leer todos los archivos en el directorio
+                        $files = scandir($absolute_image_path);
+                        $carousel_items = '';
+                        $first_item = true;
+        
+                        // Filtrar solo archivos de imagen válidos (puedes ajustar las extensiones según tus necesidades)
+                        $valid_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+                        foreach ($files as $file) {
+                            $file_path = $image_path . $file;
+                            $file_extension = pathinfo($file, PATHINFO_EXTENSION);
+        
+                            if (in_array(strtolower($file_extension), $valid_extensions)) {
+                                $active_class = $first_item ? 'active' : '';
+                                $carousel_items .= "
+                                    <div class=\"carousel-item $active_class\">
+                                        <img class=\"imagen\" src=\"$file_path\"/>
+                                    </div>";
+                                $first_item = false;
+                            }
+                        }
+        
+                        // Devolver el HTML generado
+                        return $carousel_items;
+                    } else {
+                        return "El directorio de imágenes no existe o no es accesible. Ruta intentada: $absolute_image_path";
+                    }
+                } else {
+                    return "No se encontró la ruta de la imagen para el producto con ID $id.";
+                }
+            } catch (PDOException $e) {
+                echo "¡Error!: " . $e->getMessage() . "</br>";
+                echo "¡Error al mostrar producto!</br>";
+            }
+        }
+        
         
     }
 
-/*
-// Crear una instancia de la clase que contiene la función product_inf
-$search = new Search();
 
-// Id del producto que deseas buscar
-$product_id = 1; // Por ejemplo
-
-// Obtener la información del producto
-$product_info = $search->product_inf($product_id);
-
-// Comprobar y mostrar la información del producto
-if ($product_info) {
-    echo "Nombre: " . $product_info['nombre'] . "<br>";
-    echo "Descripción: " . $product_info['descripcion'] . "<br>";
-    echo "Stock: " . $product_info['stock'] . "<br>";
-    echo "Precio: " . $product_info['precio'] . "<br>";
-    echo "IVA: " . $product_info['iva'] . "<br>";
-    echo "Imagen Ruta: " . $product_info['imagen_ruta'] . "<br>";
-    echo "Tipo de Promoción: " . $product_info['tipo_promo'] . "<br>";
-    echo "Cantidad Vendida: " . $product_info['cantidad_vendida'] . "<br>";
-} else {
-    echo "No se encontró información del producto.<br>";
-}
-*/
 ?>

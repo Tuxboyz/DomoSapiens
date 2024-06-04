@@ -83,7 +83,7 @@ require_once("../includes/Config.php");
                 $consulta = 'SELECT 
                                 id_producto, nombre, 
                                 descripcion, stock, 
-                                precio, iva, imagen_ruta, 
+                                precio, iva, ruta, imagen_ruta, 
                                 tipo_promo, cantidad_vendida
                             FROM productos
                             ORDER BY id_producto';
@@ -100,6 +100,7 @@ require_once("../includes/Config.php");
                                 <th>Stock</th>
                                 <th>Precio</th>
                                 <th>IVA</th>
+                                <th>Ruta Imagen Principal</th>
                                 <th>Ruta Imagen</th>
                                 <th>Tipo de Promoción</th>
                                 <th>Cantidad Vendida</th>
@@ -114,6 +115,7 @@ require_once("../includes/Config.php");
                                     <td>' . $producto['stock'] . '</td>
                                     <td>' . $producto['precio'] . '</td>
                                     <td>' . $producto['iva'] . '</td>
+                                    <td>'. $producto['ruta'] . '</td>
                                     <td>'. $producto['imagen_ruta'] . '</td>
                                     <td>' . $producto['tipo_promo'] . '</td>
                                     <td>' . $producto['cantidad_vendida'] . '</td>
@@ -172,7 +174,7 @@ require_once("../includes/Config.php");
                 $consulta = 'SELECT 
                                 nombre, descripcion, 
                                 stock, precio, 
-                                iva, imagen_ruta, 
+                                iva, ruta, imagen_ruta, 
                                 tipo_promo, cantidad_vendida
                              FROM productos
                              WHERE id_producto = :id_producto';
@@ -192,7 +194,7 @@ require_once("../includes/Config.php");
             }
         }
 
-        public function edit_product($id_producto, $nombre, $descripcion, $stock, $precio, $iva, $imagen_ruta, $tipo_promo, $cantidad_vendida) {
+        public function edit_product($id_producto, $nombre, $descripcion, $stock, $precio, $iva, $ruta1, $imagen_ruta, $tipo_promo, $cantidad_vendida) {
             try {
                 $datos = array(
                     ':id_producto' => $id_producto,
@@ -201,6 +203,7 @@ require_once("../includes/Config.php");
                     ':stock' => $stock,
                     ':precio' => $precio,
                     ':iva' => $iva,
+                    ':ruta' => $ruta1,
                     ':imagen_ruta' => $imagen_ruta,
                     ':tipo_promo' => $tipo_promo,
                     ':cantidad_vendida' => $cantidad_vendida
@@ -210,7 +213,8 @@ require_once("../includes/Config.php");
                                 descripcion = :descripcion,
                                 stock = :stock, 
                                 precio = :precio, 
-                                iva = :iva, 
+                                iva = :iva,
+                                ruta = :ruta, 
                                 imagen_ruta = :imagen_ruta, 
                                 tipo_promo = :tipo_promo, 
                                 cantidad_vendida = :cantidad_vendida

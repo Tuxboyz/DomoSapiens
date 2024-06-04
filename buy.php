@@ -58,16 +58,16 @@
                 <div class="col-md-5 col-lg-4 order-md-last">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-primary">Tu carrito</span>
-                        <span class="badge bg-primary rounded-pill"><?php echo $count;?></span>
+                        <span class="badge bg-primary rounded-pill"><?php echo $count;?></span><!--cantidad de articulos-->
                     </h4>
                     <ul class="list-group mb-3">
-                        <?php $items = $con2->buy_items($_SESSION['id']);?>
+                        <?php $items = $con2->buy_items($_SESSION['id']);?><!--articulos a comprar-->
                     </ul>
                 </div>
                 <div class="col-md-7 col-lg-8">
                     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <h4 class="mb-3">Selecciona dirección de envío.</h4>
-                        <div class="row g-3">
+                        <div class="row g-3"><!--mostramos el select de las direcciones-->
                             <div class="container">
                                 <div class="my-3">
                                     <?php if (!$test) {
@@ -135,7 +135,7 @@
                             </div>
                         </div>
                         <hr class="my-4">
-                        <button class="w-100 btn btn-primary btn-lg" type="submit">Finalizar pedido</button>
+                        <button class="w-100 btn btn-primary btn-lg m-3" type="submit">Finalizar pedido</button>
                     </form>
                     <div>
                         <?php
@@ -201,10 +201,16 @@
                                     }
                                     echo "</p>";
                                 } else {
-                                    $con2->pago($_SESSION['id'],$ciudad,$metodopago,$productos,$precio_envio,$precio_total);
+                                    $pago = $con2->pago($_SESSION['id'],$ciudad,$metodopago,$productos,$precio_envio,$precio_total);
+                                    if($pago == true){
+                                        $con2->pago_post_borrado($_SESSION['id']);
+                                    } else {
+                                        $errores[] = 'Error: Ha ocurrido un error inesperado con el pago.';
+                                    }
                                     echo "<p style='color:green;'> Pago efectuado exitosamente.</p>";
                                     echo '<meta http-equiv="refresh" content="2;url=my_data.php">';
                                     echo "<a href='my_data.php'>Haz clic aquí</a> si no eres redirigido automáticamente.</p>";
+                                    
                                 }
                             }
                         ?>

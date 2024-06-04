@@ -29,7 +29,7 @@
 
         if (empty($errores)) {
             $conn = new Usuario();
-            $test = $conn->validacion($usuario, $password);
+            $test = $conn->validacion($usuario, MD5($password));
             if ($test == false) {
                 $errores[] = '<div class="alert alert-danger d-flex align-items-center" role="alert">
                                 <i class="m-1 bi bi-exclamation-triangle"></i>

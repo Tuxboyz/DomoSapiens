@@ -20,9 +20,6 @@ include_once 'includes/Search.php';
     <link rel="stylesheet" href="styles/styles.css">
     <style>
         .product-image {
-            background-color: #343a40;
-            width: 100%;
-            height: 300px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -51,6 +48,35 @@ include_once 'includes/Search.php';
             color: black;
             width: 100%;
         }
+
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            color: #000; /* Black color for text */
+            background-color: #000; /* Black background color */
+        }
+        .carousel-control-prev .carousel-control-prev-icon,
+        .carousel-control-next .carousel-control-next-icon {
+            fill: #000; /* Black color for the icons */
+        }
+        .carousel-item{
+            max-height: 375px;
+            max-width: 630px;
+        }
+        .imagen{
+            max-height: 375px;
+            max-width: 630px;
+        }
+        @media (max-width: 768px) { /* Punto de corte para dispositivos móviles */
+        .carousel-item {
+            max-height: 330px; /* Ajustar altura para móviles */
+            max-width: 310px; /* Ajustar ancho para móviles */
+        }
+        .imagen{
+            max-height: 330px;
+            max-width: 310px;
+        }
+        }
     </style>
     <title>Bienvenido!</title>
 </head>
@@ -60,52 +86,73 @@ include_once 'includes/Search.php';
     </header>
 
     <main class="container-fluid">
-        <?php
-            if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id_product'])) {
-                $id = htmlspecialchars($_GET['id_product']);
-                $search = new Search();
-                $product_info = $search->product_inf($id);
-                ?>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="product-image">
-                                <p><?php echo htmlspecialchars($product_info['imagen_ruta']); ?></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="product-info">
-                                <h5><?php echo $product_info['nombre']; ?></h5>
-                                <p>Stock: <?php echo $product_info['stock'] > 5 ? 'Disponible' : ($product_info['stock'] == 0 ? 'No queda stock' : 'Quedan ' . $product_info['stock']); ?></p>
-                                <p>Precio sin iva: <?php echo number_format($product_info['precio'],2); ?>€</p>
-                                <p>IVA: <?php $iva = $product_info['precio'] * $product_info['iva'] / 100;echo number_format($iva,2); ?>€</p>
-                                <p>Precio total: <?php $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);echo number_format($precio_con_iva,2); ?>€</p>
-                                
-                                <!-- Formulario para añadir al carrito -->
-                                <form action="partials/temp.php" method="post">
-                                    <input type="hidden" name="accion" value="add">
-                                    <input type="hidden" name="id_producto" value="<?php echo $id; ?>">
-                                    <button type="submit" class="btn btn-cart">Añadir al carrito</button>
-                                </form>
+        <div class="container">
+            <?php
+                if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id_product'])) {
+                    $id = htmlspecialchars($_GET['id_product']);
+                    $search = new Search();
+                    $product_info = $search->product_inf($id);
+                    ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="product-image">
+                                    
+                                    <div id="carouselExample" class="carousel slide">
+                                        <div class="carousel-inner">
+                                            <?php 
+                                                define('PROJECT_ROOT', __DIR__ . '/');     
+                                                $con =  new Search();
+                                                $test = $con->show_product_photos(2);
+                                                echo "$test";
+                                            ?>
+                                        </div>
+                                        <button class="carousel-control-prev text-dark bg-dark" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next text-dark bg-dark" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+                                    </div>
 
-                                <!-- Formulario para comprar -->
-                                <form action="partials/temp.php" method="post">
-                                    <input type="hidden" name="accion" value="buy">
-                                    <input type="hidden" name="id_producto" value="<?php echo $id; ?>">
-                                    <button type="submit" class="btn btn-buy">Comprar</button>
-                                </form>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="product-info">
+                                    <h5><?php echo $product_info['nombre']; ?></h5>
+                                    <p>Stock: <?php echo $product_info['stock'] > 5 ? 'Disponible' : ($product_info['stock'] == 0 ? 'No queda stock' : 'Quedan ' . $product_info['stock']); ?></p>
+                                    <p>Precio sin iva: <?php echo number_format($product_info['precio'],2); ?>€</p>
+                                    <p>IVA: <?php $iva = $product_info['precio'] * $product_info['iva'] / 100;echo number_format($iva,2); ?>€</p>
+                                    <p>Precio total: <?php $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);echo number_format($precio_con_iva,2); ?>€</p>
+                                    
+                                    <!-- Formulario para añadir al carrito -->
+                                    <form action="partials/temp.php" method="post">
+                                        <input type="hidden" name="accion" value="add">
+                                        <input type="hidden" name="id_producto" value="<?php echo $id; ?>">
+                                        <button type="submit" class="btn btn-cart">Añadir al carrito</button>
+                                    </form>
+
+                                    <!-- Formulario para comprar -->
+                                    <form action="partials/temp.php" method="post">
+                                        <input type="hidden" name="accion" value="buy">
+                                        <input type="hidden" name="id_producto" value="<?php echo $id; ?>">
+                                        <button type="submit" class="btn btn-buy">Comprar</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="product-description">
-                                <p><?php echo $product_info['descripcion']; ?></p>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="product-description">
+                                    <p><?php echo $product_info['descripcion']; ?></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php  
-            }
-        ?>
+                    <?php  
+                }
+            ?>
+        </div>
     </main>
 
     <footer class="footer mt-auto">

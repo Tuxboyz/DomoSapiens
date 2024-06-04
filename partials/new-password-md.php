@@ -52,7 +52,7 @@
 
         // Check if actual password is correct
         $conn = new Usuario();
-        $valid_pass = $conn->valid_pass($_SESSION['id'], $actual_pass);
+        $valid_pass = $conn->valid_pass($_SESSION['id'], MD5($actual_pass));
 
         if ($valid_pass == false) {
             $errores[] = 'Error: La contraseña actual no es correcta.';
@@ -76,7 +76,7 @@
                 });
             </script>";
         } else {
-            $test = $conn->edit_data($_SESSION['id'], 'password', $new_pass);
+            $test = $conn->edit_data($_SESSION['id'], 'password', MD5($new_pass));
             echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     var modal = new bootstrap.Modal(document.getElementById('mod_pass'));

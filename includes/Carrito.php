@@ -1,7 +1,7 @@
 <?php
 
     require_once("Config.php");
-    
+
     function validarTarjeta($num_tarjeta) {
         $num_tarjeta = preg_replace("/\D|\s/", "", $num_tarjeta);
         $length = strlen($num_tarjeta);
@@ -288,6 +288,7 @@
                         // Agregar al arreglo de productos
                         $productos[] = [
                             "producto_id" => $row['id_producto'],
+                            "producto_nombre" => $row['nombre'],
                             "precio_unitario" => round($precio_unitario, 2),
                             "descuento" => $row['tipo_promo'],
                             "cantidad" => $row['cantidad'],
@@ -335,8 +336,22 @@
                 die();
             }
         }
-        
-        
+
+        public function pago_post_borrado($id_usuario){
+            try {
+                $datos = array(':par1' => $id_usuario);
+                $update = ('DELETE FROM carrito 
+                            WHERE id_usuario = :par1');
+
+                $stmt = $this->db->prepare($update);
+                return $stmt->execute($datos);
+
+            } catch (PDOException $e) {
+                echo "¡Error!: " . $e->getMessage() . "<br/>";
+                die();
+            }
+        }
+          
     }
 
 ?>

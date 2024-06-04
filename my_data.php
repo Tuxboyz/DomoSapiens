@@ -145,9 +145,55 @@
                             <!--Mis pedidos-->
                             <div class="container my-5">
                                 <div class="bg-body-tertiary p-5 rounded">
-                                    <div class="col-sm-8 py-5 mx-auto text-center">
-                                        <p class="fs-5">Todavía no has realizado ning&uacute;n pedido...</p>
-                                    </div>
+
+                                <?php //funcion nueva
+
+                                    $tickets = $conn->get_tickets($_SESSION['id']);
+
+                                    if (!empty($tickets)) {
+                                        echo '<div class="row row-cols-1 row-cols-md-2 g-4">';
+                                        
+                                        foreach ($tickets as $ticket) {
+                                            $fecha_objeto = new DateTime($ticket['fecha_compra']);
+                                            $fecha_sin_hora = $fecha_objeto->format('d-m-Y');
+                                
+                                            echo '<div class="col">';
+                                            echo '    <div class="card h-100">';
+                                            echo '        <div class="card-body">';
+                                            echo '            <h5 class="card-title">Ticket ID: ' . htmlspecialchars($ticket['id_ticket']) . '</h5>';
+                                            echo '            <p class="card-text"><strong>Productos del ' . htmlspecialchars($fecha_sin_hora) . '</strong></p>';
+                                            echo '            <ul class="list-group">';
+                                            
+                                            foreach ($ticket['productos'] as $producto) {
+                                                echo '                <li class="list-group-item m-1">';
+                                                echo '                    <strong>Producto ID: </strong> ' . htmlspecialchars($producto['producto_id']) . '<br>';
+                                                echo                      htmlspecialchars($producto['producto_nombre']) . ' - <strong>x</strong>' . htmlspecialchars($producto['cantidad']) .' - '. htmlspecialchars($producto['precio_unitario']) .'€/<strong>ud</strong> <br>';
+                                                echo '                    <strong>Descuento: </strong> ' . htmlspecialchars($producto['descuento']) . '%<br>';
+                                                echo '                    <strong>Precio Total: </strong>' . htmlspecialchars($producto['precio_total']). '€';
+                                                echo '                </li>';
+                                            }
+                                
+                                            echo '            </ul>';
+                                            echo '            <hr>';
+                                            echo '            <p class="card-text"><strong>Envío: </strong>' . htmlspecialchars($ticket['precio_envio']) . '€</p>';
+                                            echo '            <p class="card-text"><strong>Precio Total: </strong>' . htmlspecialchars($ticket['precio_total']) . '€</p>';
+                                            echo '        </div>';
+                                            echo '        <div class="card-footer">';
+                                            echo '            <a href="PDF.php?id=' . htmlspecialchars($ticket['id_ticket']) . '"><button type="button" class="btn btn-danger rounded-pill w-100" data-bs-toggle="modal" data-bs-target="#mod_' . htmlspecialchars($ticket['id_ticket']) . '">';
+                                            echo '                PDF - <i class="bi bi-filetype-pdf"></i>';
+                                            echo '            </button></a>';
+                                            echo '        </div>';
+                                            echo '    </div>';
+                                            echo '</div>';
+                                        }
+                                
+                                        echo '</div>';
+                                    } else {
+                                        echo '<div class="col-sm-8 py-5 mx-auto text-center"><p class="fs-5">Todavía no has realizado ningún pedido...</p></div>';
+                                    }
+
+                                ?>
+
                                 </div>
                             </div>
                             <div class="form-check text-center my-3">

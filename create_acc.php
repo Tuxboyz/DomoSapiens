@@ -133,7 +133,7 @@
                             echo "</p>";
                         } else {
                             $usuario = new Usuario();
-                            $usuario->crearUser($nombre, $apellido, $email, $password, $fecha_nacimiento, $telefono);
+                            $usuario->crearUser($nombre, $apellido, $email, MD5($password), $fecha_nacimiento, $telefono);
                             echo "<p style='color:green;'> Registrado exitosamente.</p>";
                             echo '<meta http-equiv="refresh" content="2;url=login.php">';
                             echo "<a href='login.php'>Haz clic aquí</a> si no eres redirigido automáticamente.</p>";

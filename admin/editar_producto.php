@@ -26,6 +26,7 @@ session_start();
                 $stock = barrer($_POST['stock']);
                 $precio = barrer($_POST['precio']);
                 $iva = barrer($_POST['iva']);
+                $ruta1 = barrer($_POST['ruta1']);//nueva ruta
                 $ruta = barrer($_POST['ruta']);
                 $promos = barrer($_POST['promo']);
                 $vendidos = barrer($_POST['vendidos']);
@@ -42,6 +43,9 @@ session_start();
                 if(empty($iva)){
                     $errores[] = 'No has seleccionado una cantidad de IVA para el producto.';
                 }
+                if(empty($ruta1)){
+                    $errores[] = 'No has añadido una ruta para la imagen principal.';
+                }
                 if(empty($ruta)){
                     $errores[] = 'No has añadido una ruta para las imagenes';
                 }
@@ -50,7 +54,7 @@ session_start();
                 }
 
                 if (empty($errores)){
-                    $update = $conn->edit_product($id, $nombre, $descripcion, $stock, $precio, $iva, $ruta, $promos, $vendidos);
+                    $update = $conn->edit_product($id, $nombre, $descripcion, $stock, $precio, $iva, $ruta1, $ruta, $promos, $vendidos);
                     if ($update) {
                         $mensaje = 'Se ha actualizado con exito.';
                     } else {
@@ -126,6 +130,11 @@ session_start();
                         <label for="iva" class="form-label">IVA:</label>
                         <input type="number" class="form-control" id="iva" name="iva" min="0" max="100" placeholder="Introduce el nuevo IVA que va a tener el producto" value="<?php echo htmlspecialchars($dato['iva'] ?? ''); ?>" required="">
                         <div class="invalid-feedback">Es necesario poner el IVA que va a tener el producto (usar solo valores numericos).</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ruta1" class="form-label">Ruta de la imagen principal:</label>
+                        <input type="text" class="form-control" id="ruta1" name="ruta1" placeholder="Introduce la nueva ruta que va a tener el producto" value="<?php echo htmlspecialchars($dato['ruta'] ?? ''); ?>" required="">
+                        <div class="invalid-feedback">Es necesario el nombre de la Ruta de la imagen principal(escribela bien sino, no se mostraran).</div>
                     </div>
                     <div class="mb-3">
                         <label for="ruta" class="form-label">Ruta de la/s imagen/es:</label>
