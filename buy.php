@@ -54,7 +54,7 @@
             <?php include_once 'partials/header.php';?>
         </header>
         <div class='container'>
-            <div class="row g-5">
+            <div class="row">
                 <div class="col-md-5 col-lg-4 order-md-last">
                     <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-primary">Tu carrito</span>
@@ -135,7 +135,9 @@
                             </div>
                         </div>
                         <hr class="my-4">
-                        <button class="w-100 btn btn-primary btn-lg m-3" type="submit">Finalizar pedido</button>
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-lg m-3" type="submit">Finalizar pedido</button>
+                        </div>
                     </form>
                     <div>
                         <?php

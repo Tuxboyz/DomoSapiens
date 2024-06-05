@@ -18,36 +18,78 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles/styles.css">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1 0 auto;
+        }
+        .footer {
+            flex-shrink: 0;
+        }
         .filter-section {
-        background-color: #f8f9fa;
-        padding: 1rem;
+            background-color: #f8f9fa;
+            padding: 1rem;
         }
 
         .product-grid {
-        display: grid;
-        /* Adjust the number of columns based on screen size */
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
         }
 
-        .imagen{
-            max-height: 275px;
-            max-width: 275px;
+        .imagen {
+            max-height: 260px;
+            max-width: 260px;
+        }
+
+        @media (max-width: 768px) {
+            .imagen {
+                max-height: 250px;
+                max-width: 210px;
+            }
         }
 
         .product-card {
-        background-color: #dee2e6;
-        padding: 1rem;
-        border: 1px solid #ced4da;
-        text-align: center;
-        max-height: 350px;
-        max-width: 350px;
+            background-color: #dee2e6;
+            padding: 1rem;
+            border: 1px solid #ced4da;
+            text-align: center;
+            max-height: 350px;
+            max-width: 350px;
         }
 
         @media (min-width: 768px) {
-        .product-grid {
-            grid-template-columns: repeat(4, 1fr);
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
+        @media (min-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 1400px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Estilos para las etiquetas <a> */
+        a {
+            color: inherit; /* Hereda el color del elemento padre */
+            text-decoration: none; /* Elimina el subrayado */
+        }
+
+        a:hover, a:focus {
+            color: #0056b3; /* Color al pasar el cursor o enfocar (puedes cambiar este valor) */
+            text-decoration: underline; /* Subrayado al pasar el cursor o enfocar (opcional) */
         }
     </style>
     <title>Bienvenido!</title>
@@ -57,160 +99,160 @@
         <?php include_once 'partials/header.php'; include_once 'includes/Search.php'; ?>
     </header>
 
-    <main class="container-fluid">
-    <div class='container'>
-        <?php
-            if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['keyword'])) {
-                $keyword = htmlspecialchars($_GET['keyword']); // Asegúrate de que el nombre coincida con el del formulario
-                $search = new Search();
+    <main class="container-fluid content">
+        <div class="container">
+            <?php
+                if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['keyword'])) {
+                    $keyword = htmlspecialchars($_GET['keyword']); // Asegúrate de que el nombre coincida con el del formulario
+                    $search = new Search();
 
-                if (empty($keyword)) {
-                    // Si está vacío
-        ?>
-                    <div class='container'>
-                        <h2 class="mb-3">No se proporcionó una palabra clave para la búsqueda.</h2>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="container my-5">
-                                    <div class="bg-body-tertiary p-5 rounded">
-                                        <div class="col-sm-8 py-5 mx-auto text-center">
-                                            <p class="fs-5">No se proporcionó una palabra clave para la búsqueda.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-check text-center my-5">
-                                    Quieres volver a la paguina principal cliquea <a href="index.php">aquí</a>!
-                                </div>
-                                <div class="form-check text-center my-5">
-                                    ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        <?php
-                } else {
-                    $results = $search->searcher($keyword);
-                    if ($results) {
-        ?>
-                        <h2 class="mb-3">Resultados de "<?php echo $keyword ?>"</h2>
-                        <div class="row p-3 m-3">
-                            <div class="col-md-12">
-                                <div class="product-grid">
-        <?php 
-                                    foreach ($results as $r) { $mini = new Search();$info = $search->show_mini_prod($r);
-                                        echo '<a href="product.php?id_product='. $r .'">
-                                                <div class="product-card">
-                                                    '.$info.'
-                                                </div>
-                                             </a>'; } 
-        ?>
-                                </div>
-                            </div>
-                        </div>
-        <?php
-                    } else {
-        ?>
-                            <div class='container'>
-                                <h2 class="mb-3">No se encontraron resultados de "<?php echo $keyword; ?>"</h2>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="container my-5">
-                                            <div class="bg-body-tertiary p-5 rounded">
-                                                <div class="col-sm-8 py-5 mx-auto text-center">
-                                                    <p class="fs-5">No se encontraron resultados de "<?php echo $keyword; ?>".</p>
-                                                </div>
+                    if (empty($keyword)) {
+                        // Si está vacío
+            ?>
+                        <div class='container'>
+                            <h2 class="mb-3">No se proporcionó una palabra clave para la búsqueda.</h2>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="container my-5">
+                                        <div class="bg-body-tertiary p-5 rounded">
+                                            <div class="col-sm-8 py-5 mx-auto text-center">
+                                                <p class="fs-5">No se proporcionó una palabra clave para la búsqueda.</p>
                                             </div>
                                         </div>
-                                        <div class="form-check text-center my-5">
-                                            Quieres volver a la paguina principal cliquea <a href="index.php">aquí</a>!
-                                        </div>
-                                        <div class="form-check text-center my-5">
-                                            ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
-                                        </div>
+                                    </div>
+                                    <div class="form-check text-center my-5">
+                                        Quieres volver a la paguina principal cliquea <a href="index.php">aquí</a>!
+                                    </div>
+                                    <div class="form-check text-center my-5">
+                                        ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
                                     </div>
                                 </div>
                             </div>
-        <?php
-                    }
-                }
-            }
-        ?>
-        <?php
-            if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['categoria'])) {
-                $categoria = htmlspecialchars($_GET['categoria']); // Asegúrate de que el nombre coincida con el del formulario
-                $search = new Search();
-
-                if (empty($categoria)) {
-                    // Si está vacío
-        ?>
-                    <div class='container'>
-                        <h2 class="mb-3">No se proporcionó una categoría para la búsqueda.</h2>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="container my-5">
-                                    <div class="bg-body-tertiary p-5 rounded">
-                                        <div class="col-sm-8 py-5 mx-auto text-center">
-                                            <p class="fs-5">No se proporcionó una categoría para la búsqueda.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-check text-center my-5">
-                                    Quieres volver a la paguina principal cliquea <a href="index.php">aquí</a>!
-                                </div>
-                                <div class="form-check text-center my-5">
-                                    ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
-                                </div>
-                            </div>
                         </div>
-                    </div>
-        <?php
-                } else {
-                    $results = $search->categories_searcher($categoria);
-                    if ($results) {
-        ?>
-                        <div class="row p-3 m-3">
-                            <div class="col-md-12">
-                                <div class="product-grid">
-        <?php 
-                                    foreach ($results as $r) { $mini = new Search();$info = $search->show_mini_prod($r);
-                                        echo '<a href="product.php?id_product='. $r .'">
-                                                <div class="product-card">
-                                                    '.$info.'
-                                                </div>
-                                             </a>'; } 
-        ?>
-                                </div>
-                            </div>
-                        </div>
-        <?php
+            <?php
                     } else {
-        ?>
-                            <div class='container'>
-                                <h2 class="mb-3">No se encontraron resultados en la categoría "<?php echo $categoria; ?>"</h2>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="container my-5">
-                                            <div class="bg-body-tertiary p-5 rounded">
-                                                <div class="col-sm-8 py-5 mx-auto text-center">
-                                                    <p class="fs-5">No se encontraron resultados en la categoría "<?php echo $categoria; ?>".</p>
+                        $results = $search->searcher($keyword);
+                        if ($results) {
+            ?>
+                            <h2 class="mb-3">Resultados de "<?php echo $keyword ?>"</h2>
+                            <div class="row m-3">
+                                <div class="col-md-12">
+                                    <div class="product-grid">
+            <?php 
+                                        foreach ($results as $r) { $mini = new Search();$info = $search->show_mini_prod($r);
+                                            echo '<a href="product.php?id_product='. $r .'">
+                                                    <div class="product-card">
+                                                        '.$info.'
+                                                    </div>
+                                                 </a>'; } 
+            ?>
+                                    </div>
+                                </div>
+                            </div>
+            <?php
+                        } else {
+            ?>
+                                <div class='container'>
+                                    <h2 class="mb-3">No se encontraron resultados de "<?php echo $keyword; ?>"</h2>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="container my-5">
+                                                <div class="bg-body-tertiary p-5 rounded">
+                                                    <div class="col-sm-8 py-5 mx-auto text-center">
+                                                        <p class="fs-5">No se encontraron resultados de "<?php echo $keyword; ?>".</p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-check text-center my-5">
-                                            Quieres volver a la paguina principal cliquea <a href="index.php">aquí</a>!
-                                        </div>
-                                        <div class="form-check text-center my-5">
-                                            ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
+                                            <div class="form-check text-center my-5">
+                                                Quieres volver a la paguina principal cliquea <a href="index.php">aquí</a>!
+                                            </div>
+                                            <div class="form-check text-center my-5">
+                                                ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-        <?php
+            <?php
+                        }
                     }
                 }
-            }
-        ?>
-    </div>
+            ?>
+            <?php
+                if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['categoria'])) {
+                    $categoria = htmlspecialchars($_GET['categoria']); // Asegúrate de que el nombre coincida con el del formulario
+                    $search = new Search();
+
+                    if (empty($categoria)) {
+                        // Si está vacío
+            ?>
+                        <div class='container'>
+                            <h2 class="mb-3">No se proporcionó una categoría para la búsqueda.</h2>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="container my-5">
+                                        <div class="bg-body-tertiary p-5 rounded">
+                                            <div class="col-sm-8 py-5 mx-auto text-center">
+                                                <p class="fs-5">No se proporcionó una categoría para la búsqueda.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-check text-center my-5">
+                                        Quieres volver a la paguina principal cliquea <a href="index.php">aquí</a>!
+                                    </div>
+                                    <div class="form-check text-center my-5">
+                                        ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            <?php
+                    } else {
+                        $results = $search->categories_searcher($categoria);
+                        if ($results) {
+            ?>
+                            <div class="row p-3 m-3">
+                                <div class="col-md-12">
+                                    <div class="product-grid">
+            <?php 
+                                        foreach ($results as $r) { $mini = new Search();$info = $search->show_mini_prod($r);
+                                            echo '<a href="product.php?id_product='. $r .'">
+                                                    <div class="product-card">
+                                                        '.$info.'
+                                                    </div>
+                                                 </a>'; } 
+            ?>
+                                    </div>
+                                </div>
+                            </div>
+            <?php
+                        } else {
+            ?>
+                                <div class='container'>
+                                    <h2 class="mb-3">No se encontraron resultados en la categoría "<?php echo $categoria; ?>"</h2>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="container my-5">
+                                                <div class="bg-body-tertiary p-5 rounded">
+                                                    <div class="col-sm-8 py-5 mx-auto text-center">
+                                                        <p class="fs-5">No se encontraron resultados en la categoría "<?php echo $categoria; ?>".</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-check text-center my-5">
+                                                Quieres volver a la paguina principal cliquea <a href="index.php">aquí</a>!
+                                            </div>
+                                            <div class="form-check text-center my-5">
+                                                ¿Tienes algún problema? Podemos ayudarte <a href="faq.php">aquí</a>!
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            <?php
+                        }
+                    }
+                }
+            ?>
+        </div>
     </main>
 
     <footer class="footer mt-auto">

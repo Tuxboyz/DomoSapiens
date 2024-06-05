@@ -19,6 +19,21 @@ include_once 'includes/Search.php';
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles/styles.css">
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1 0 auto;
+        }
+        .footer {
+            flex-shrink: 0;
+        }
+
         .product-image {
             display: flex;
             justify-content: center;
@@ -67,10 +82,10 @@ include_once 'includes/Search.php';
             max-height: 375px;
             max-width: 630px;
         }
-        @media (max-width: 768px) { /* Punto de corte para dispositivos móviles */
+        @media (max-width: 768px) {
         .carousel-item {
-            max-height: 330px; /* Ajustar altura para móviles */
-            max-width: 310px; /* Ajustar ancho para móviles */
+            max-height: 330px;
+            max-width: 310px;
         }
         .imagen{
             max-height: 330px;
@@ -85,7 +100,7 @@ include_once 'includes/Search.php';
         <?php include_once 'partials/header.php';?>
     </header>
 
-    <main class="container-fluid">
+    <main class="container-fluid content">
         <div class="container">
             <?php
                 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id_product'])) {
@@ -102,7 +117,7 @@ include_once 'includes/Search.php';
                                             <?php 
                                                 define('PROJECT_ROOT', __DIR__ . '/');     
                                                 $con =  new Search();
-                                                $test = $con->show_product_photos(2);
+                                                $test = $con->show_product_photos($id);
                                                 echo "$test";
                                             ?>
                                         </div>

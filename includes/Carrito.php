@@ -91,8 +91,12 @@
                 $costoEnvio = 10;
         
                 if ($stmt->rowCount() > 0) {
-                    echo '<table>';
-                    echo '<tr><th>Producto</th><th>Cantidad</th><th>Precio IVA/inc</th><th>Descuento</th><th>Precio Total</th><th></th></tr>';
+                    echo '<div class="table-responsive">';
+                    echo '<table class="table">';
+                    echo '<thead>';
+                    echo '<tr><th>Producto</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cantidad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Precio IVA/inc</th><th>Descuento</th><th>Precio Total</th><th></th></tr>';
+                    echo '</thead>';
+                    echo '<tbody>';
         
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         $precio_unitario = $row['precio'] + ($row['precio'] * ($row['iva'] / 100));
@@ -105,25 +109,35 @@
                         echo '<tr>';
                         echo '<td>' . htmlspecialchars($row['nombre']) . '</td>';
                         echo '<td>';
-                        echo '<button type="button" class="col-2 btn btn-warning" onclick="decrementQuantity(' . $row['id_producto'] . ')">-</button>';
-                        echo '<input type="number" class="col-8" name="cantidades[' . $row['id_producto'] . ']" value="' . htmlspecialchars($row['cantidad']) . '" min="1">';
-                        echo '<button type="button" class="col-2 btn btn-warning" onclick="incrementQuantity(' . $row['id_producto'] . ')">+</button>';
+                        echo '<div class="input-group">';
+                        echo '<div class="input-group-prepend">';
+                        echo '<button type="button" class="btn btn-warning" onclick="decrementQuantity(' . $row['id_producto'] . ')">-</button>';
+                        echo '</div>';
+                        echo '<input type="number" class="form-control text-center" name="cantidades[' . $row['id_producto'] . ']" value="' . htmlspecialchars($row['cantidad']) . '" min="1">';
+                        echo '<div class="input-group-append">';
+                        echo '<button type="button" class="btn btn-warning" onclick="incrementQuantity(' . $row['id_producto'] . ')">+</button>';
+                        echo '</div>';
+                        echo '</div>';
                         echo '</td>';
-                        echo '<td>' . number_format($precio_unitario, 2) . '€</td>';
-                        echo '<td>' . htmlspecialchars($descuento) . '%</td>';
-                        echo '<td>' . number_format($precio_total_producto, 2) . '€</td>';
+                        echo '<td id="pu' . $row['id_producto'] . '">' . number_format($precio_unitario, 2) . '€</td>';
+                        echo '<td id="pd' . $row['id_producto'] . '">' . htmlspecialchars($descuento) . '%</td>';
+                        echo '<td id="pt' . $row['id_producto'] . '">' . number_format($precio_total_producto, 2) . '€</td>';
                         echo '<td>';
-                            echo '<a class="btn btn-sm btn-danger" href="partials/eliminar_producto.php?id_producto_elim='. $row['id_producto'] .'"><i class="bi bi-trash"></i></a>';
+                        echo '<a class="btn btn-sm btn-danger" href="partials/eliminar_producto.php?id_producto_elim='. $row['id_producto'] .'"><i class="bi bi-trash"></i></a>';
                         echo '</td>';
                         echo '</tr>';
                     }
         
                     $totalCarritoConEnvio = $totalCarrito + $costoEnvio;
         
+                    echo '</tbody>';
                     echo '</table>';
-                    echo '<p>Envío: ' . number_format($costoEnvio, 2) . '€</p>';
-                    echo '<p>Total: ' . number_format($totalCarritoConEnvio, 2) . '€</p>';
-                    echo '<button type="submit" form="comprar" class="m-1 btn btn-success">Comprar</button>';
+                    echo '</div>'; // cierre de table-responsive
+                    echo '<div class="p-5">';
+                    echo '<p id="pe">Envío: ' . number_format($costoEnvio, 2) . '€</p>';
+                    echo '<p id="pte">Total: ' . number_format($totalCarritoConEnvio, 2) . '€</p>';
+                    echo '<button type="submit" form="comprar" class="btn btn-success">Comprar</button>';
+                    echo '</div>';
                 } else {
                     echo '<p class="fs-5">¿Qué quieres <a href="index.php">comprar</a>?</p>';
                 }

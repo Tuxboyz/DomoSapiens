@@ -123,12 +123,12 @@
         
                 if ($product_info) {
                     $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);
-                    $texto = '<div class="imagen">
-                                <img src="' . $product_info['ruta'] . '" alt="Imagen del producto" style="max-width: 100%; max-height: 100%;">
+                    $texto = '<div>
+                                <img src="' . $product_info['ruta'] . '" alt="Imagen del producto" class="imagen">
                               </div>
                               <div>
-                                <div>' . $product_info['nombre'] . '</div>
-                                <div>' . number_format($precio_con_iva, 2) . '$</div>
+                                <div><b>' . $product_info['nombre'] . '</b></div>
+                                <div>' . number_format($precio_con_iva, 2) . '€</div>
                               </div>';
                 } else {
                     $texto = "Ha ocurrido un error.";
