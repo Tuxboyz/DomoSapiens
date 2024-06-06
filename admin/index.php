@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Si no hay errores, proceder con la validación del usuario
     if (empty($errores)) {
         $conn = new Admin();
-        $test = $conn->validacion_admin($usuario, $password);
+        $test = $conn->validacion_admin($usuario, MD5($password));
         if ($test == false) {
             $errores[] = '<div class="alert alert-danger d-flex align-items-center" role="alert">
                             <i class="m-1 bi bi-exclamation-triangle"></i>

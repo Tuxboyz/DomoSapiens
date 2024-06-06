@@ -1,10 +1,10 @@
 <?php
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+    
     session_start();
     require_once '../includes/Carrito.php';
-
-    echo "<pre> estoy en la funcion de temp.php";
-    var_dump($_POST);
-    echo "</pre>";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['accion']) && isset($_POST['id_producto']) && isset($_SESSION['id'])) {
@@ -25,12 +25,10 @@
                 exit();
             }
         } else {
-            echo "Estoy dentro del segundo IF";
             header('Location: ../index.php');
             exit();
         }
     } else {
-        echo "estoy dentro del primer IF";
         header('Location: ../index.php');
         exit();
     }

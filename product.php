@@ -1,4 +1,9 @@
-<?php 
+<?php
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 if ($_SERVER["REQUEST_METHOD"] !== "GET" || !isset($_GET['id_product'])) {
     header('Location: index.php');
@@ -139,7 +144,8 @@ include_once 'includes/Search.php';
                                     <p>Stock: <?php echo $product_info['stock'] > 5 ? 'Disponible' : ($product_info['stock'] == 0 ? 'No queda stock' : 'Quedan ' . $product_info['stock']); ?></p>
                                     <p>Precio sin iva: <?php echo number_format($product_info['precio'],2); ?>€</p>
                                     <p>IVA: <?php $iva = $product_info['precio'] * $product_info['iva'] / 100;echo number_format($iva,2); ?>€</p>
-                                    <p>Precio total: <?php $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);echo number_format($precio_con_iva,2); ?>€</p>
+                                    <p>Descuento: <?php echo $product_info['tipo_promo'];?>%</p>
+                                    <p>Precio total: <?php $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100); $precio_con_descuento = $precio_con_iva - ($precio_con_iva * ($product_info['tipo_promo']/100)); echo number_format($precio_con_descuento,2); ?>€</p>
                                     
                                     <!-- Formulario para añadir al carrito -->
                                     <form action="partials/temp.php" method="post">

@@ -39,3 +39,8 @@ footer{
 #data-tab-pane{
     max-width: 1000px;
 }
+
+
+#bg-blue{
+    background-color: rgb(142, 202, 239);
+}

@@ -113,7 +113,7 @@
 
         public function show_mini_prod($id) {
             try {
-                $query = 'SELECT nombre, precio, iva, ruta
+                $query = 'SELECT nombre, precio, iva, ruta, tipo_promo
                           FROM productos 
                           WHERE id_producto = :id';
                 $stmt = $this->db->prepare($query);
@@ -123,12 +123,13 @@
         
                 if ($product_info) {
                     $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);
+                    $producto_con_descuento = $precio_con_iva - ($precio_con_iva * ($product_info['tipo_promo']/100));
                     $texto = '<div>
                                 <img src="' . $product_info['ruta'] . '" alt="Imagen del producto" class="imagen">
                               </div>
                               <div>
                                 <div><b>' . $product_info['nombre'] . '</b></div>
-                                <div>' . number_format($precio_con_iva, 2) . '€</div>
+                                <div>' . number_format($producto_con_descuento, 2) . '€</div>
                               </div>';
                 } else {
                     $texto = "Ha ocurrido un error.";
@@ -143,7 +144,7 @@
         public function product_inf($id) {
             try {
                 $query = 'SELECT nombre, descripcion, stock, 
-                                 precio, iva, imagen_ruta, 
+                                 precio, iva, 
                                  tipo_promo, cantidad_vendida 
                           FROM productos 
                           WHERE id_producto = :id';
@@ -211,6 +212,81 @@
             }
         }
         
+        public function show_mini_card_best_promo(){
+            try {
+                $query = 'SELECT id_producto, nombre, precio, iva, ruta, tipo_promo
+                          FROM productos 
+                          ORDER BY tipo_promo DESC
+                          LIMIT 5';
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+                $products_info = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+                if ($products_info) {
+                    $texto = '';
+                    foreach ($products_info as $product_info) {
+                        $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);
+                        $producto_con_descuento = $precio_con_iva - ($precio_con_iva * ($product_info['tipo_promo']/100));
+                        $texto .= '
+
+                            <div class="col-sm-5 col-md-5 col-lg-2 mb-2">
+                                <a href="product.php?id_product=' . $product_info['id_producto'] . '">
+                                    <div class="card address-card h-100">
+                                    <div class="card-body">
+                                        <img src="' . $product_info['ruta'] . '" alt="Imagen del producto" class="imagen">
+                                    </div>
+                                    <div><b>' . $product_info['nombre'] . '</b></div>
+                                    <div>' . number_format( $producto_con_descuento, 2) . '€</div>
+                                    </div>
+                                </a>
+                            </div>';
+                    }
+                } else {
+                    $texto = "No se encontraron productos.";
+                }
+                return $texto;
+            } catch (PDOException $e) {
+                echo "¡Error!: " . $e->getMessage() . "</br>";
+                echo "¡Error al mostrar productos!</br>";
+            }
+        }
+
+        public function show_mini_card_best_seller(){
+            try {
+                $query = 'SELECT id_producto, nombre, precio, iva, ruta, cantidad_vendida
+                          FROM productos 
+                          ORDER BY cantidad_vendida DESC
+                          LIMIT 5';
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+                $products_info = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+                if ($products_info) {
+                    $texto = '';
+                    foreach ($products_info as $product_info) {
+                        $precio_con_iva = $product_info['precio'] + ($product_info['precio'] * $product_info['iva'] / 100);
+                        $texto .= '
+                            <div class="col-sm-5 col-md-5 col-lg-2 mb-2">
+                                <a href="product.php?id_product=' . $product_info['id_producto'] . '">
+                                    <div class="card address-card h-100">
+                                        <div class="card-body">
+                                            <img src="' . $product_info['ruta'] . '" alt="Imagen del producto" class="imagen">
+                                        </div>
+                                        <div><b>' . $product_info['nombre'] . '</b></div>
+                                        <div>' . number_format($precio_con_iva, 2) . '€</div>
+                                    </div>
+                                </a>
+                            </div>';
+                    }
+                } else {
+                    $texto = "No se encontraron productos.";
+                }
+                return $texto;
+            } catch (PDOException $e) {
+                echo "¡Error!: " . $e->getMessage() . "</br>";
+                echo "¡Error al mostrar productos!</br>";
+            }
+        }
         
     }
 

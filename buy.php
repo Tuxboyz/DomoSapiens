@@ -28,6 +28,25 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <link rel="stylesheet" href="styles/styles.css">
         <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+            .content {
+                flex: 1 0 auto;
+            }
+            .footer {
+                flex-shrink: 0;
+            }
+            .filter-section {
+                background-color: #f8f9fa;
+                padding: 1rem;
+            }
+            
             .error-message {
                 color: red;
                 font-size: 0.9em;
@@ -142,12 +161,7 @@
                     <div>
                         <?php
                             if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['id']) && isset($_POST['ciudad'])) {
-
-                                echo '<pre>';
-                                var_dump($_POST);
-                                echo '</pre>';
                                 
-
                                 $datos = $con2->obtener_resumen_compra($_SESSION['id']);
 
                                 $productos = json_encode($datos["productos"]);
@@ -209,6 +223,7 @@
                                     } else {
                                         $errores[] = 'Error: Ha ocurrido un error inesperado con el pago.';
                                     }
+                                    
                                     echo "<p style='color:green;'> Pago efectuado exitosamente.</p>";
                                     echo '<meta http-equiv="refresh" content="2;url=my_data.php">';
                                     echo "<a href='my_data.php'>Haz clic aquí</a> si no eres redirigido automáticamente.</p>";

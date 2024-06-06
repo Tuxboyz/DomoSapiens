@@ -1,4 +1,8 @@
-<?php 
+<?php
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+    
     session_start();
 
     if(isset($_SESSION['nombre'])){
@@ -20,6 +24,25 @@
     <link rel="stylesheet" href="styles/styles.css">
     <title>Bienvenido!</title>
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1 0 auto;
+        }
+        .footer {
+            flex-shrink: 0;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 1rem;
+        }
+        
         .error-message {
             color: red;
             font-size: 0.9em;

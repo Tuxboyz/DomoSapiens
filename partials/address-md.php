@@ -21,7 +21,6 @@
         echo '</select>';
     }
 ?>
-
 <div class="container my-5">
     <div class="bg-body-tertiary p-5 rounded">
         <?php

@@ -308,51 +308,50 @@
             
                 if ($stmt->rowCount() >= 1) {
                     while ($fila = $stmt->fetch()) {
-                        $addresses .= '
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card address-card h-100">
-                                <div class="card-body" id="'.$fila["id_direccion"].'">
-                                    <h5 class="card-title">Dirección de Entrega</h5>
-                                    <p class="card-text">'.$fila["direccion"].'</p>
-                                    <p class="card-text">Ciudad: '.$fila["ciudad"].'</p>
-                                    <p class="card-text">Código Postal: '.$fila["cod_post"].'</p>
-                                </div>
-                                <button type="button" 
-                                        class="m-1 btn btn-danger rounded-pill"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#mod_'.$fila['id_direccion'].'">
-                                    Eliminar - <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-            
-                            <div class="modal fade" id="mod_'.$fila['id_direccion'].'" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Dirección</h1>
-                                            <a href="my_data.php" class="btn-close"></a>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="delete_'.$fila['id_direccion'].'_form" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="POST">
-                                                <div class="form-floating" id="log-block">
-                                                    <p>¿Estás seguro de borrar esta dirección?</p>
-                                                    <input type="hidden" name="id_direccion" value="'.$fila['id_direccion'].'">
-                                                    <p>
-                                                    <input type="checkbox" class="form-check-input" id="id_address_'.$fila['id_direccion'].'" name="confirm_delete" value="1">
-                                                    <label class="form-check-label" for="id_address_'.$fila['id_direccion'].'">Estoy seguro</label></p>
+                        $addresses .= '<div class="col-md-6 col-lg-4 mb-4">
+                                            <div class="card address-card h-100">
+                                                <div class="card-body" id="'.$fila["id_direccion"].'">
+                                                    <h5 class="card-title">Dirección de Entrega</h5>
+                                                    <p class="card-text">'.$fila["direccion"].'</p>
+                                                    <p class="card-text">Ciudad: '.$fila["ciudad"].'</p>
+                                                    <p class="card-text">Código Postal: '.$fila["cod_post"].'</p>
                                                 </div>
-                                                <div id="form_message_'.$fila['id_direccion'].'" class="text-center"></div>
-                                            </form>
+                                                <button type="button" 
+                                                        class="m-1 btn btn-danger rounded-pill"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#mod_'.$fila['id_direccion'].'">
+                                                    Eliminar - <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <a href="my_data.php"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button></a>
-                                            <button type="submit" form="delete_'.$fila['id_direccion'].'_form" class="btn btn-primary">Borrar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>';
+
+                                        <div class="modal fade" id="mod_'.$fila['id_direccion'].'" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Eliminar Dirección</h1>
+                                                        <a href="my_data.php" class="btn-close"></a>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="delete_'.$fila['id_direccion'].'_form" action="'.htmlspecialchars($_SERVER["PHP_SELF"]).'" method="POST">
+                                                            <div class="form-floating" id="log-block">
+                                                                <p>¿Estás seguro de borrar esta dirección?</p>
+                                                                <input type="hidden" name="id_direccion" value="'.$fila['id_direccion'].'">
+                                                                <div class="d-flex justify-content-center align-items-center">
+                                                                    <label class="form-check-label mb-0" for="id_address_'.$fila['id_direccion'].'"><input type="checkbox" class="form-check-input me-2" id="id_address_'.$fila['id_direccion'].'" name="confirm_delete" value="1">Estoy seguro</label>
+                                                                </div>
+                                                            </div>
+                                                            <div id="form_message_'.$fila['id_direccion'].'" class="text-center"></div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a href="my_data.php"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button></a>
+                                                        <button type="submit" form="delete_'.$fila['id_direccion'].'_form" class="btn btn-primary">Borrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>';
                     }
             
                     return $addresses;
@@ -414,10 +413,7 @@
             
                 if ($stmt->rowCount() >= 1) {
                     while ($fila = $stmt->fetch()) {
-                        $addresses .= '<option value="' . htmlspecialchars($fila["id_direccion"]) . '">' . 
-                                    htmlspecialchars($fila["direccion"]) . ', ' . 
-                                    htmlspecialchars($fila["ciudad"]) . ' ' . 
-                                    htmlspecialchars($fila["cod_post"]) . '</option>';
+                        $addresses .= '<option value="' . $fila["direccion"] . ', ' . $fila["ciudad"] . ', ' . $fila["cod_post"] . '">' . $fila["direccion"] . ', ' . $fila["ciudad"] . ', ' . $fila["cod_post"] . '</option>';
                     }
                     $addresses .= '</select>';
                 } else {
@@ -514,12 +510,9 @@
                 // Consulta para obtener los tickets con la dirección asociada
                 $consulta = 'SELECT 
                                 t.id_direccion, t.metodo_pago, t.productos, 
-                                t.precio_envio, t.precio_total, t.fecha_compra, 
-                                d.direccion, d.ciudad, d.cod_post 
+                                t.precio_envio, t.precio_total, t.fecha_compra
                             FROM 
                                 tickets t
-                            JOIN 
-                                direcciones d ON t.id_direccion = d.id_direccion
                             WHERE 
                                 t.id_usuario = :par1
                             AND t.id_ticket = :par2';
@@ -552,7 +545,7 @@
                 // Cambiar el formato de la fecha de compra a DD/MM/AAAA
                 $fecha_compra = (new DateTime($ticket['fecha_compra']))->format('d/m/Y');
                 
-                $direccion_ciudad_cp = htmlspecialchars($ticket['direccion'] . ', ' . $ticket['ciudad'] . ', ' . $ticket['cod_post']);
+                $direccion_ciudad_cp = $ticket['id_direccion'];
                 
                 // Initialize the table HTML
                 $tabla_productos = '<table border="1" cellpadding="5" cellspacing="0">';
@@ -594,7 +587,7 @@
         
             } catch (PDOException $e) {
                 echo "¡Error!: " . $e->getMessage() . "<br/>";
-                echo "¡Error al obtener los tickets!</br>";
+                echo "¡Error al obtener los tickets estoy en Usuario.php!</br>";
             }
         }
         
@@ -605,12 +598,9 @@
                 // Consulta para obtener los tickets con la dirección asociada
                 $consulta = 'SELECT 
                                 t.id_ticket, t.id_direccion, t.metodo_pago, t.productos, 
-                                t.precio_envio, t.precio_total, t.fecha_compra, 
-                                d.direccion, d.ciudad, d.cod_post 
+                                t.precio_envio, t.precio_total, t.fecha_compra
                             FROM 
                                 tickets t
-                            JOIN 
-                                direcciones d ON t.id_direccion = d.id_direccion
                             WHERE 
                                 t.id_usuario = :par1';
         

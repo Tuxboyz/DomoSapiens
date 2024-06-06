@@ -18,4 +18,4 @@ function crearCarpeta($ruta, $inicio = 1, $cantidad = 10) {
 }
 
 // Ejemplo de uso
-crearCarpeta('img/', 1, 20); // Crear 50 carpetas numeradas desde 100
+crearCarpeta('img/', 1, 100); // Crear 50 carpetas numeradas desde 100

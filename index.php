@@ -4,6 +4,10 @@ session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+include_once 'includes/Search.php';
+$conn = new Search();
+$cards = $conn->show_mini_card_best_promo();
+$cards2 = $conn->show_mini_card_best_seller();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -18,23 +22,71 @@ error_reporting(E_ALL);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles/styles.css">
     <style>
-      .carousel-item {
-          height: auto;
-          width: 100%;
-      }
-      .carousel-item img {
-          max-height: 100%;
-          max-width: 100%;
-      }
-      @media (max-width: 576px) {
+        html,
+        body {
+          height: 100%;
+          margin: 0;
+        }
+        body {
+          display: flex;
+          flex-direction: column;
+        }
+        .content {
+          flex: 1 0 auto;
+        }
+        .footer {
+          flex-shrink: 0;
+        }
+        .filter-section {
+          background-color: #f8f9fa;
+          padding: 1rem;
+        }
+
         .carousel-item {
           height: auto;
-        }
-        .carousel-item img {
           width: 100%;
+        }
+
+        .carousel-item img {
+          max-height: 100%;
+          max-width: 100%;
+        }
+
+        @media (max-width: 576px) {
+          .carousel-item {
+            height: auto;
+          }
+
+          .carousel-item img {
+            width: 100%;
+            height: auto;
+          }
+        }
+
+        .card-body {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px;
+        }
+
+        .card-body img {
+          max-width: 100%;
           height: auto;
         }
-      }
+
+        .card {
+          margin-bottom: 20px;
+        }
+
+        @media (max-width: 576px) {
+          .card-body img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+          }
+        }
+
     </style>
 
     <title>Bienvenido!</title>
@@ -45,13 +97,13 @@ error_reporting(E_ALL);
     </header>
 
     <main>
-      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
+      <div id="bg-blue" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center ">
           <div class="col-md-12 p-lg-3 mx-auto">
             <h1 class="display-3 fw-bold">Donde nos preocupamos por tu hogar</h1>
             <h3 class="fw-normal text-muted mb-3">¡Te damos la bienvenida a Domosapiens!</h3>
           </div>
       </div>
-      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
+      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
           <div class="col-md-12 mx-auto">
             <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
               <div class="carousel-inner">
@@ -108,19 +160,28 @@ error_reporting(E_ALL);
             </div>
           </div>
       </div>
-      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
+      <div id="bg-blue" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center ">
           <div class="col-md-12 p-lg-3 mx-auto">
-            <h1 class="display-3 fw-bold">Imagen de "mira nuestros productos en oferta"</h1>
+            <h1 class="display-3 fw-bold">Mira nuestros productos en oferta</h1>
           </div>
       </div>
-      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
+      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
           <div class="col-md-12 p-lg-3 mx-auto">
-            <h1 class="display-3 fw-bold"> Cards de Productos en oferta</h1>
+            <div class="row justify-content-center">
+              <?php echo $cards;?>
+            </div>
           </div>
       </div>
-      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
+      <div id="bg-blue" class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center ">
           <div class="col-md-12 p-lg-3 mx-auto">
-            <h1 class="display-3 fw-bold">Imagen de "Productos mas vendidos en estos momentos"</h1>
+            <h1 class="display-3 fw-bold">Productos mas vendidos en estos momentos</h1>
+          </div>
+      </div>
+      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center">
+          <div class="col-md-12 p-lg-3 mx-auto">
+            <div class="row justify-content-center">
+              <?php echo $cards2;?>
+            </div>
           </div>
       </div>
     </main>
